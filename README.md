@@ -308,7 +308,7 @@ Abaixo estão as representações visuais das histórias de usuário (mínimo de
 ![TB-01](docs/relatorio.png.jpeg)
 
 ### 🎮  · loop
-![TB-01](docs/loop.png.jpeg.png)
+![TB-01](docs/loop.png.jpeg)
 
 ### 🎮 TB-06 · learderboard
 ![TB-01](docs/learderboard.png.jpeg)
