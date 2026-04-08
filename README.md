@@ -232,7 +232,7 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 
 ## 📸 Backlog Visual
 
-![Backlog](docs/backlog.png)
+![Backlog](docs/backlog1.png.jpeg)
 
 ---
 
