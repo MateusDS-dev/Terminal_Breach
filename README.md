@@ -123,6 +123,8 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 * Número entre 1 e 100 usando `srand(time)`
 * Não repete na mesma execução
 * Validado em múltiplas execuções
+**Diagrama:**
+![TB-01](docs/mermaid-diagram.png)
 
 ---
 
