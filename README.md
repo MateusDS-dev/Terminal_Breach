@@ -142,7 +142,7 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
   
 **Diagrama:**
 
-![diagram](docs/mermaid-diagram(1).png)
+![diagram](docs/mermaid-diagram1.png)
   
 
 ---
@@ -157,6 +157,11 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 * Salva dados completos
 * Usa modo append
 
+**Diagrama:**
+
+![diagram](docs/mermaid-diagram2.png)
+  
+
 ---
 
 ### TB-04 · Média de desempenho
@@ -168,6 +173,12 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 * Lê o arquivo
 * Calcula média correta
 * Exibe no relatório
+
+
+**Diagrama:**
+
+![diagram](docs/mermaid-diagram3.png)
+  
 
 ---
 
@@ -181,6 +192,11 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 * Resultado correto
 * Código comentado
 
+**Diagrama:**
+
+![diagram](docs/mermaid-diagram4.png)
+  
+
 ---
 
 ### TB-06 · Sugestões de estratégia
@@ -193,6 +209,11 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 * Sugere melhorias
 * Exibe no final
 
+
+**Diagrama:**
+
+![diagram](docs/mermaid-diagram6.png)
+  
 ---
 
 ### 🟡 Prioridade 2
@@ -203,6 +224,10 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 * Configuração inicial
 * Registro no log
 
+**Diagrama:**
+
+![diagram](docs/mermaid-diagram7.png)
+  
 ---
 
 ### TB-08 · Sistema de rating
@@ -210,6 +235,11 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 * Baseado em eficiência
 * Exibição temática
 * Salvo no log
+
+**Diagrama:**
+
+![diagram](docs/mermaid-diagram8.png)
+  
 
 ---
 
@@ -221,6 +251,10 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 * Top 5 jogadores
 * Exibição formatada
 
+**Diagrama:**
+
+![diagram](docs/mermaid-diagram9.png)
+  
 ---
 
 ### ⭐ Extra
@@ -231,6 +265,10 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 * Execução automática
 * Explicação passo a passo
 
+**Diagrama:**
+
+![diagram](docs/mermaid-diagram10.png)
+  
 ---
 
 ## 📸 Board do Projeto
