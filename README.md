@@ -77,10 +77,10 @@ terminal-breach/
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/seu-usuario/terminal-breach.git
+ https://github.com/MateusDS-dev/Terminal_Breach.git
 
 # Entrar na pasta
-cd terminal-breach
+cd terminal_breach
 
 # Compilar
 make
@@ -282,6 +282,59 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 ![Backlog](docs/backlog1.png.jpeg)
 
 ---
+
+## 📱 Protótipo Lo-Fi (Figma)
+
+O protótipo de baixa fidelidade foi desenvolvido utilizando o Figma, representando as principais telas do sistema.
+
+
+
+---
+
+## 📝 Sketches e Storyboards
+
+Abaixo estão as representações visuais das histórias de usuário (mínimo de 10):
+
+### 🎮  ·login
+![TB-01](login.png.jpeg)
+
+### 🎮 · tela inicial
+![TB-01](telainicial.png.jpeg)
+
+### 🎮  · sacn
+![TB-01](scan.png.jpeg)
+
+### 🎮  · relatorio
+![TB-01](relatorio.png.jpeg)
+
+### 🎮  · loop
+![TB-01](loop.png.jpeg.png)
+
+### 🎮 TB-06 · learderboard
+![TB-01](learderboard.png.jpeg)
+
+### 🎮 · Níveis
+![TB-01](dificuldade.png.jpeg)
+
+### 🎮 ·ghost
+![TB-01](ghost.png.jpeg)
+
+### 🎮  · game over
+![TB-01](gameover.png.jpeg)
+
+### 🎮  · feedback
+![TB-01](feedback.png.jpeg)
+
+---
+
+## 🎥 Screencast do Protótipo
+
+Veja a demonstração do protótipo em funcionamento:
+
+https://youtube.com/shorts/VYx9vgLPDo4?si=486jED70kR1aUYWi
+
+
+
 
 ## 📚 Observações Acadêmicas
 
