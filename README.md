@@ -302,13 +302,13 @@ Abaixo estão as representações visuais das histórias de usuário (mínimo de
 ![TB-01](docs/telainicial.png.jpeg)
 
 ### 🎮  · sacn
-![TB-01](scan.png.jpeg)
+![TB-01](docs/scan.png.jpeg)
 
 ### 🎮  · relatorio
 ![TB-01](docs/relatorio.png.jpeg)
 
 ### 🎮  · loop
-![TB-01](loop.png.jpeg.png)
+![TB-01](docs/loop.png.jpeg.png)
 
 ### 🎮 TB-06 · learderboard
 ![TB-01](docs/learderboard.png.jpeg)
@@ -317,7 +317,7 @@ Abaixo estão as representações visuais das histórias de usuário (mínimo de
 ![TB-01](docs/dificuldade.png.jpeg)
 
 ### 🎮 ·ghost
-![TB-01](ghost.png.jpeg)
+![TB-01](docs/ghost.png.jpeg)
 
 ### 🎮  · game over
 ![TB-01](docs/gameover.png.jpeg)
