@@ -296,34 +296,34 @@ O protótipo de baixa fidelidade foi desenvolvido utilizando o Figma, representa
 Abaixo estão as representações visuais das histórias de usuário (mínimo de 10):
 
 ### 🎮  ·login
-![TB-01](login.png.jpeg)
+![TB-01](docs/login.png.jpeg)
 
 ### 🎮 · tela inicial
-![TB-01](telainicial.png.jpeg)
+![TB-01](docs/telainicial.png.jpeg)
 
 ### 🎮  · sacn
 ![TB-01](scan.png.jpeg)
 
 ### 🎮  · relatorio
-![TB-01](relatorio.png.jpeg)
+![TB-01](docs/relatorio.png.jpeg)
 
 ### 🎮  · loop
 ![TB-01](loop.png.jpeg.png)
 
 ### 🎮 TB-06 · learderboard
-![TB-01](learderboard.png.jpeg)
+![TB-01](docs/learderboard.png.jpeg)
 
 ### 🎮 · Níveis
-![TB-01](dificuldade.png.jpeg)
+![TB-01](docs/dificuldade.png.jpeg)
 
 ### 🎮 ·ghost
 ![TB-01](ghost.png.jpeg)
 
 ### 🎮  · game over
-![TB-01](gameover.png.jpeg)
+![TB-01](docs/gameover.png.jpeg)
 
 ### 🎮  · feedback
-![TB-01](feedback.png.jpeg)
+![TB-01](docs/feedback.png.jpeg)
 
 ---
 
