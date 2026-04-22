@@ -115,160 +115,127 @@ As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
 ### 🔴 Prioridade 1 — MVP
 
 ### TB-01 · Geração de número aleatório
-
 > Como jogador, quero que o jogo gere um número secreto diferente a cada sessão, para que a experiência seja imprevisível.
 
 **Critérios:**
-
 * Número entre 1 e 100 usando `srand(time)`
 * Não repete na mesma execução
 * Validado em múltiplas execuções
-  
-**Diagrama:**
 
+**Diagrama:**
 ![diagram](docs/mermaid-diagram.png)
 
 ---
 
-### TB-02 · Loop com dicas temáticas
-
-> Como jogador, quero receber feedback imersivo ao errar tentativas.
-
-**Critérios:**
-
-* Mensagens para alto/baixo
-* Mostra tentativas restantes
-* Encerra corretamente
-  
-**Diagrama:**
-
-![diagram](docs/mermaid-diagram1.png)
-  
-
----
-
-### TB-03 · Registro em log
-
-> Como jogador, quero histórico das partidas.
-
-**Critérios:**
-
-* Cria `audit_log.txt`
-* Salva dados completos
-* Usa modo append
-
-**Diagrama:**
-
-![diagram](docs/mermaid-diagram2.png)
-  
-
----
-
-### TB-04 · Média de desempenho
-
-> Como jogador, quero entender minha performance.
-
-**Critérios:**
-
-* Lê o arquivo
-* Calcula média correta
-* Exibe no relatório
-
-
-**Diagrama:**
-
-![diagram](docs/mermaid-diagram3.png)
-  
-
----
-
-### TB-05 · Estatísticas com recursão
-
-> Como estudante, quero aplicar recursão em problemas reais.
-
-**Critérios:**
-
-* Funções recursivas implementadas
-* Resultado correto
-* Código comentado
-
-**Diagrama:**
-
-![diagram](docs/mermaid-diagram4.png)
-  
-
----
-
-### TB-06 · Sugestões de estratégia
-
-> Como jogador, quero melhorar minha eficiência.
-
-**Critérios:**
-
-* Detecta padrões
-* Sugere melhorias
-* Exibe no final
-
-
-**Diagrama:**
-
-![diagram](docs/mermaid-diagram6.png)
-  
----
-
-### 🟡 Prioridade 2
-
 ### TB-07 · Níveis de dificuldade
-
 * Script Kiddie, Hacker, Elite, Ghost
 * Configuração inicial
 * Registro no log
 
 **Diagrama:**
+![diagram](docs/mermaid-diagram5.png)
 
-![diagram](docs/mermaid-diagram7.png)
-  
+---
+
+### TB-02 · Loop com dicas temáticas
+> Como jogador, quero receber feedback imersivo ao errar tentativas.
+
+**Critérios:**
+* Mensagens para alto/baixo
+* Mostra tentativas restantes
+* Encerra corretamente
+
+**Diagrama:**
+![diagram](docs/mermaid-diagram9.png)
+
+---
+
+### 🟡 Prioridade 2
+
+### TB-06 · Sugestões de estratégia
+> Como jogador, quero melhorar minha eficiência.
+
+**Critérios:**
+* Detecta padrões
+* Sugere melhorias
+* Exibe no final
+
+**Diagrama:**
+![diagram](docs/mermaid-diagram4.png)
+
 ---
 
 ### TB-08 · Sistema de rating
-
 * Baseado em eficiência
 * Exibição temática
 * Salvo no log
 
 **Diagrama:**
-
-![diagram](docs/mermaid-diagram8.png)
-  
+![diagram](docs/mermaid-diagram6.png)
 
 ---
 
 ### 🟢 Prioridade 3
 
-### TB-09 · Leaderboard
+### TB-03 · Registro em log
+> Como jogador, quero histórico das partidas.
 
+**Critérios:**
+* Cria `audit_log.txt`
+* Salva dados completos
+* Usa modo append
+
+**Diagrama:**
+![diagram](docs/mermaid-diagram1.png)
+
+---
+
+### TB-04 · Média de desempenho
+> Como jogador, quero entender minha performance.
+
+**Critérios:**
+* Lê o arquivo
+* Calcula média correta
+* Exibe no relatório
+
+**Diagrama:**
+![diagram](docs/mermaid-diagram2.png)
+
+---
+
+### TB-05 · Estatísticas com recursão
+> Como estudante, quero aplicar recursão em problemas reais.
+
+**Critérios:**
+* Funções recursivas implementadas
+* Resultado correto
+* Código comentado
+
+**Diagrama:**
+![diagram](docs/mermaid-diagram3.png)
+
+---
+
+### TB-09 · Leaderboard
 * Ordenação por desempenho
 * Top 5 jogadores
 * Exibição formatada
 
 **Diagrama:**
+![diagram](docs/mermaid-diagram7.png)
 
-![diagram](docs/mermaid-diagram9.png)
-  
 ---
 
 ### ⭐ Extra
 
 ### TB-10 · Modo Fantasma
-
 * Busca binária recursiva
 * Execução automática
 * Explicação passo a passo
 
 **Diagrama:**
+![diagram](docs/mermaid-diagram8.png)
 
-![diagram](docs/mermaid-diagram10.png)
-  
 ---
 
 ## 📸 Board do Projeto
