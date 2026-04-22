@@ -296,8 +296,7 @@ Demonstração automática usando busca binária
 
 Veja a demonstração do protótipo em funcionamento:
 
-https://youtube.com/shorts/VYx9vgLPDo4?si=486jED70kR1aUYWi
-
+https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
 
 
 
