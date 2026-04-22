@@ -262,35 +262,33 @@ O protótipo de baixa fidelidade foi desenvolvido utilizando o Figma, representa
 
 Abaixo estão as representações visuais das histórias de usuário (mínimo de 10):
 
-### 🎮  ·login
-![TB-01](docs/login.png.jpeg)
+### 🎮  ·tela inicial
+Entrada do sistema, apresentação e botão “Iniciar invasão”
+![TB-01](docs/telainicial1.png)
 
-### 🎮 · tela inicial
-![TB-01](docs/telainicial.png.jpeg)
+### 🎮 · Seleção de Dificuldade
+Escolha do nível (Script Kiddie, Hacker, Elite, Ghost)
+![TB-01](docs/tela2.png)
 
-### 🎮  · sacn
-![TB-01](docs/scan.png.jpeg)
+### 🎮  ·Jogo / Tentativa
+Onde o jogador digita o código e tenta invadir
+![TB-01](docs/tela3.png)
 
-### 🎮  · relatorio
-![TB-01](docs/relatorio.png.jpeg)
+### 🎮  · Feedback da Tentativa
+Resposta do sistema (ex: muito alto / muito baixo)
+![TB-01](docs/tela4.png)
 
-### 🎮  · loop
-![TB-01](docs/loop.png.jpeg)
+### 🎮  ·Relatório de Auditoria
+Estatísticas do jogador (média, desempenho, etc.)
+![TB-01](docs/tela5.png)
 
-### 🎮 TB-06 · learderboard
-![TB-01](docs/learderboard.png.jpeg)
+### 🎮 .Leaderboard
+Ranking dos melhores jogadores
+![TB-01](docs/tela6.png)
 
-### 🎮 · Níveis
-![TB-01](docs/dificuldade.png.jpeg)
-
-### 🎮 ·ghost
-![TB-01](docs/ghost.png.jpeg)
-
-### 🎮  · game over
-![TB-01](docs/gameover.png.jpeg)
-
-### 🎮  · feedback
-![TB-01](docs/feedback.png.jpeg)
+### 🎮 ·Modo Fantasma (Busca Binária)
+Demonstração automática usando busca binária
+![TB-01](docs/tela7.png)
 
 ---
 
