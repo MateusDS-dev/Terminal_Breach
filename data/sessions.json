@@ -1,0 +1,101 @@
+[
+  {
+    "timestamp": "2026-04-29 10:13:11",
+    "jogador": "1",
+    "dificuldade": "Script Kiddie",
+    "segredo": 3,
+    "tentativas": 7,
+    "rating": "Analista",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-04-29 10:42:29",
+    "jogador": "Rafael",
+    "dificuldade": "Operativo",
+    "segredo": 44,
+    "tentativas": 7,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-04-29 10:43:05",
+    "jogador": "Rafael",
+    "dificuldade": "Operativo",
+    "segredo": 62,
+    "tentativas": 7,
+    "rating": "Analista",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-04-29 10:44:22",
+    "jogador": "Rafael",
+    "dificuldade": "Ghost",
+    "segredo": 13,
+    "tentativas": 5,
+    "rating": "Operativo",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-04-29 10:45:00",
+    "jogador": "Rafael",
+    "dificuldade": "Operativo",
+    "segredo": 37,
+    "tentativas": 7,
+    "rating": "Analista",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-04-29 10:46:29",
+    "jogador": "ses",
+    "dificuldade": "Ghost",
+    "segredo": 28,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-04-29 10:48:11",
+    "jogador": "ses",
+    "dificuldade": "Analista",
+    "segredo": 61,
+    "tentativas": 8,
+    "rating": "Script Kiddie",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-04-29 10:49:23",
+    "jogador": "teste",
+    "dificuldade": "Ghost",
+    "segredo": 96,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-04-29 10:49:50",
+    "jogador": "GHOST_BOT",
+    "dificuldade": "Ghost",
+    "segredo": 71,
+    "tentativas": 5,
+    "rating": "Operativo",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-04-29 10:50:33",
+    "jogador": "teste 2",
+    "dificuldade": "Operativo",
+    "segredo": 25,
+    "tentativas": 2,
+    "rating": "Ghost",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-04-29 10:51:15",
+    "jogador": "Anonimo",
+    "dificuldade": "Operativo",
+    "segredo": 62,
+    "tentativas": 5,
+    "rating": "Operativo",
+    "venceu": true
+  }
+]

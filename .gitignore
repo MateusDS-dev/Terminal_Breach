@@ -1,0 +1,13 @@
+# Binários compilados
+terminal_breach.exe
+terminal_breach
+*.o
+*.obj
+
+# Arquivos de IDE e editor
+.vscode/
+*.user
+
+# Arquivos temporários do Windows
+Thumbs.db
+desktop.ini
