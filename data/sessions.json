@@ -97,5 +97,95 @@
     "tentativas": 5,
     "rating": "Operativo",
     "venceu": true
+  },
+  {
+    "timestamp": "2026-04-29 15:55:55",
+    "jogador": "Lui",
+    "dificuldade": "Script Kiddie",
+    "segredo": 21,
+    "tentativas": 7,
+    "rating": "Analista",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-05-05 12:49:53",
+    "jogador": "teste Luis",
+    "dificuldade": "Ghost",
+    "segredo": 47,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-05-05 12:51:10",
+    "jogador": "teste Luis",
+    "dificuldade": "Analista",
+    "segredo": 98,
+    "tentativas": 5,
+    "rating": "Operativo",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-05-05 13:00:06",
+    "jogador": "teste 2",
+    "dificuldade": "Analista",
+    "segredo": 48,
+    "tentativas": 7,
+    "rating": "Analista",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-05-05 13:01:24",
+    "jogador": "neo",
+    "dificuldade": "Script Kiddie",
+    "segredo": 3,
+    "tentativas": 6,
+    "rating": "Operativo",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-05-05 13:02:21",
+    "jogador": "ney",
+    "dificuldade": "Operativo",
+    "segredo": 89,
+    "tentativas": 7,
+    "rating": "Analista",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-05-05 13:03:15",
+    "jogador": "ney",
+    "dificuldade": "Ghost",
+    "segredo": 66,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-05-05 13:03:56",
+    "jogador": "ney",
+    "dificuldade": "Ghost",
+    "segredo": 100,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-05-05 13:04:46",
+    "jogador": "ney",
+    "dificuldade": "Ghost",
+    "segredo": 63,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-05-05 13:05:13",
+    "jogador": "ney",
+    "dificuldade": "Ghost",
+    "segredo": 51,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
   }
 ]

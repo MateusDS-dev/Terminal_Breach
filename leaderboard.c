@@ -7,7 +7,7 @@
 #include <string.h>
 
 #define MAX_JOGADORES 256
-#define TOP_N         5
+#define TOP_N         10
 
 typedef struct {
     char  nome[64];
