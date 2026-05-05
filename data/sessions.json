@@ -97,5 +97,68 @@
     "tentativas": 5,
     "rating": "Operativo",
     "venceu": true
+  },
+  {
+    "timestamp": "2026-05-05 15:49:37",
+    "jogador": "hack",
+    "dificuldade": "Analista",
+    "segredo": 95,
+    "tentativas": 6,
+    "rating": "Operativo",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-05-05 15:50:31",
+    "jogador": "luis",
+    "dificuldade": "Ghost",
+    "segredo": 71,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-05-05 15:51:11",
+    "jogador": "luis",
+    "dificuldade": "Operativo",
+    "segredo": 2,
+    "tentativas": 5,
+    "rating": "Operativo",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-05-05 15:51:59",
+    "jogador": "ney",
+    "dificuldade": "Ghost",
+    "segredo": 58,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-05-05 15:52:25",
+    "jogador": "ney",
+    "dificuldade": "Ghost",
+    "segredo": 43,
+    "tentativas": 5,
+    "rating": "Script Kiddie",
+    "venceu": false
+  },
+  {
+    "timestamp": "2026-05-05 15:53:10",
+    "jogador": "ney",
+    "dificuldade": "Ghost",
+    "segredo": 90,
+    "tentativas": 3,
+    "rating": "Ghost",
+    "venceu": true
+  },
+  {
+    "timestamp": "2026-05-05 15:53:49",
+    "jogador": "anonimo",
+    "dificuldade": "Script Kiddie",
+    "segredo": 18,
+    "tentativas": 7,
+    "rating": "Analista",
+    "venceu": true
   }
 ]

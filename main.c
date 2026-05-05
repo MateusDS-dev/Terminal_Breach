@@ -79,7 +79,7 @@ static void exibir_menu(const char *nome)
     printf("  |                                                       |\n");
     printf("  |   1. Iniciar sessao de invasao                       |\n");
     printf("  |   2. Relatorio de auditoria  (stats + histograma)    |\n");
-    printf("  |   3. Placar de lideres       (top 5 hackers)         |\n");
+    printf("  |   3. Placar de lideres       (top 10 hackers)         |\n");
     printf("  |   4. Sair                                             |\n");
     printf("  |                                                       |\n");
     printf("  |   Dica: rode  terminal_breach --ghost                |\n");
