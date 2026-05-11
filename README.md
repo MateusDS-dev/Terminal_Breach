@@ -30,7 +30,6 @@ O projeto foi estruturado em duas camadas, com comunicação real entre front-en
 - [API HTTP](#api-http)
 - [Troubleshooting](#troubleshooting)
 - [Roadmap](#roadmap)
-- [Contribuição](#contribuição)
 
 ---
 
