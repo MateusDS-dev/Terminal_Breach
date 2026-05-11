@@ -25,6 +25,7 @@ O projeto foi estruturado em duas camadas, com comunicação real entre front-en
   - [Back-end (C)](#back-end-c)
   - [Front-end (React + TSX)](#front-end-react--tsx)
   - [Validação da Integração](#validação-da-integração)
+- [Testar como jogo online (LAN e internet)](#testar-como-jogo-online-lan-e-internet)
 - [Configuração de Ambiente](#configuração-de-ambiente)
 - [API HTTP](#api-http)
 - [Troubleshooting](#troubleshooting)
@@ -180,13 +181,45 @@ npm run build
 
 ---
 
+## Testar como jogo online (LAN e internet)
+
+### Mesma rede (Wi‑Fi / LAN) — “online em casa”
+
+1. No PC que roda a API: `terminal_breach.exe --api 8080` (a API já escuta em todas as interfaces, `0.0.0.0`).
+2. Inicie o front com host exposto: `npm run dev -- --host` (o Vite mostra o endereço **Network**, ex.: `http://192.168.0.10:5173`).
+3. No **Windows**, libere `terminal_breach.exe` no firewall para **rede privada** (porta **8080**).
+4. No celular ou outro PC, abra o mesmo URL **Network** do Vite. O front chama a API em **`http://<mesmo-IP>:8080`** automaticamente.
+5. Multiplayer: um jogador cria a sala no aparelho A; o outro entra com o código no aparelho B.
+
+### Pela internet (sem hospedar em servidor) — túnel
+
+Use um túnel HTTPS até a sua máquina e aponte o front para a URL pública da **API**.
+
+1. Instale [ngrok](https://ngrok.com/) ou use [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/).
+2. Com a API rodando em `8080`, exponha essa porta, por exemplo: `ngrok http 8080`.
+3. Copie a URL HTTPS gerada (ex.: `https://abcd-12.ngrok-free.app`).
+4. No projeto `web/`, crie `.env.local`:
+
+```env
+VITE_BACKEND_URL=https://abcd-12.ngrok-free.app
+```
+
+5. Reinicie `npm run dev`. O jogo e o multiplayer passam a usar essa API “na nuvem”.
+6. Para o amigo abrir o **front** pela internet, você pode:
+   - rodar **outro** túnel na porta do Vite (`5173`) e enviar esse link; ou
+   - publicar o `dist/` em qualquer hospedagem estática e manter `VITE_BACKEND_URL` apontando para o ngrok da API (rebuild após mudar a env).
+
+**Nota:** URLs de túnel mudam a cada execução no plano gratuito; atualize `.env.local` quando mudar.
+
+---
+
 ## Configuração de Ambiente
 
-Por padrão, o front usa `http://localhost:8080`.
+Em **`npm run dev`** (sem `VITE_BACKEND_URL`), o Vite faz **proxy** de `/health` e `/api/*` para `http://127.0.0.1:8080`. O browser fala só com o Vite (mesma origem), o que evita CORS e o problema em que **`localhost:8080` não é o seu programa C** (muito comum quando `localhost` resolve para **IPv6** `::1` e outro serviço responde com “404 Page Not Found”, enquanto **`127.0.0.1:8080`** funciona).
 
-Se você abrir o Vite pelo endereço **Network** (ex.: `http://192.168.0.10:5173`), o front passa a chamar a API em **`http://192.168.0.10:8080`** automaticamente (mesmo IP, porta 8080). Assim o multiplayer e o `/health` funcionam na LAN sem configurar nada.
+Fora do dev (ou com `VITE_BACKEND_URL` definida), o front usa o IP da página + `:8080` na LAN, ou **`http://127.0.0.1:8080`** como padrão em `localhost` — nunca assume que `http://localhost:8080` é a API C.
 
-Para forçar uma URL fixa (outro PC, Docker, túnel), use `VITE_BACKEND_URL`.
+Para forçar uma URL fixa (túnel, outro PC, Docker), use `VITE_BACKEND_URL`.
 
 Linux/macOS:
 
@@ -292,6 +325,7 @@ Regras resumidas: **mesmo segredo** para os dois; **turnos alternados**; limite 
 - **CORS**: a API já possui cabeçalhos de CORS para desenvolvimento local.
 - **`method_not_allowed` ao abrir `http://IP:8080/`**: em versões antigas da API, GET fora de `/health` respondia 405; atualize o binário ou use `http://IP:8080/health` para testar.
 - **Multiplayer diz que a API está off**: confirme `http://SEU_IP:8080/health` no navegador do **mesmo** dispositivo que abre o jogo; no Windows, libere o `terminal_breach.exe` no firewall (rede privada).
+- **`localhost:8080/health` dá 404 e `127.0.0.1:8080/health` funciona**: outro programa está escutando em **IPv6** (`::1`) na porta 8080; use `127.0.0.1` ou o proxy do Vite em dev (já configurado no `vite.config.ts`).
 
 ---
 

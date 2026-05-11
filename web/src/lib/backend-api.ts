@@ -10,13 +10,22 @@ function buildConfiguredApiBase(): string {
   const env = (import.meta.env.VITE_BACKEND_URL as string | undefined)?.trim();
   if (env) return env.replace(/\/$/, "");
 
-  if (typeof window !== "undefined" && window.location?.hostname) {
-    const h = window.location.hostname;
-    if (h !== "localhost" && h !== "127.0.0.1") {
-      return `${window.location.protocol}//${h}:8080`;
-    }
+  if (typeof window === "undefined") {
+    return "http://127.0.0.1:8080";
   }
-  return "http://localhost:8080";
+
+  /* `npm run dev`: base vazia = URLs relativas → proxy no vite.config.ts */
+  if (import.meta.env.DEV) {
+    return "";
+  }
+
+  const h = window.location.hostname;
+  if (h !== "localhost" && h !== "127.0.0.1") {
+    return `${window.location.protocol}//${h}:8080`;
+  }
+
+  /* Padrão IPv4 literal: `localhost` pode ir para ::1 onde outro app responde 404 */
+  return "http://127.0.0.1:8080";
 }
 
 /** Base que respondeu `/health` com sucesso (evita IPv6 localhost vs IPv4 do servidor C). */
@@ -27,10 +36,14 @@ function uniqueApiCandidates(): string[] {
   const list: string[] = [];
   const add = (u: string) => {
     const x = u.replace(/\/$/, "");
+    /* "" = mesma origem (proxy Vite em dev) */
+    if (x === "" && !list.includes("")) {
+      list.push("");
+      return;
+    }
     if (x && !list.includes(x)) list.push(x);
   };
   add(buildConfiguredApiBase());
-  /* localhost no Windows costuma resolver para ::1; o servidor C em AF_INET escuta em 0.0.0.0 (IPv4) */
   add("http://127.0.0.1:8080");
   add("http://localhost:8080");
   return list;
