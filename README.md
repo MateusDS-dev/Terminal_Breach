@@ -329,17 +329,5 @@ Regras resumidas: **mesmo segredo** para os dois; **turnos alternados**; limite 
 
 ---
 
-## Roadmap
-
-- Multiplayer em tempo real (WebSocket) em vez de polling HTTP.
-- Persistência das sessões da API em banco (SQLite/PostgreSQL).
-- Ranking global consolidado no back-end.
-- Autenticação de jogadores.
-- Comunicação em tempo real com WebSocket.
-- Testes automatizados (unitários e integração).
-- Pipeline CI com build e validação automática.
-
----
-
 
 
