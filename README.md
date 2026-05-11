@@ -215,7 +215,7 @@ VITE_BACKEND_URL=https://abcd-12.ngrok-free.app
 
 Em **`npm run dev`** (sem `VITE_BACKEND_URL`), o Vite faz **proxy** de `/health` e `/api/*` para `http://127.0.0.1:8080`. O browser fala só com o Vite (mesma origem), o que evita CORS e o problema em que **`localhost:8080` não é o seu programa C** (muito comum quando `localhost` resolve para **IPv6** `::1` e outro serviço responde com “404 Page Not Found”, enquanto **`127.0.0.1:8080`** funciona).
 
-Fora do dev (ou com `VITE_BACKEND_URL` definida), o front usa o IP da página + `:8080` na LAN, ou **`http://127.0.0.1:8080`** como padrão em `localhost` — nunca assume que `http://localhost:8080` é a API C.
+Fora do dev (ou com `VITE_BACKEND_URL` definida), o front usa o IP da página + `:8080` na LAN, ou **`http://127.0.0.1:8080`** como padrão em `localhost` nunca assume que `http://localhost:8080` é a API C.
 
 Para forçar uma URL fixa (túnel, outro PC, Docker), use `VITE_BACKEND_URL`.
 
