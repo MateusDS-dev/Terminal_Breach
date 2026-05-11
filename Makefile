@@ -6,6 +6,11 @@ CC      = gcc
 CFLAGS  = -Wall -Wextra -std=c11 -Iinclude
 LDFLAGS = -lm
 
+# Winsock (API HTTP) — necessário no Windows com MinGW; ignorado em Linux/macOS
+ifeq ($(OS),Windows_NT)
+LDFLAGS += -lws2_32
+endif
+
 # Nome do executável (no Windows recebe .exe automaticamente pelo gcc)
 TARGET  = terminal_breach
 
