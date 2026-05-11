@@ -18,6 +18,7 @@ import {
   midOf,
   dailySeed,
 } from "@/lib/terminal-breach";
+import { isBackendAvailable, startBackendGame, submitBackendGuess } from "@/lib/backend-api";
 
 interface Props {
   player: string;
@@ -35,6 +36,7 @@ export function GameSession({ player, onExit, daily = false }: Props) {
   const [difficulty, setDifficulty] = useState<Difficulty>(daily ? "operative" : "operative");
   const [secret, setSecret] = useState(0);
   const [attempts, setAttempts] = useState(0);
+  const [maxAttempts, setMaxAttempts] = useState(0);
   const [history, setHistory] = useState<Feedback[]>([]);
   const [guess, setGuess] = useState("");
   const [won, setWon] = useState(false);
@@ -43,33 +45,61 @@ export function GameSession({ player, onExit, daily = false }: Props) {
   const [startedAt, setStartedAt] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [finalSession, setFinalSession] = useState<Sessao | null>(null);
+  const [backendEnabled, setBackendEnabled] = useState(false);
+  const [backendChecked, setBackendChecked] = useState(false);
+  const [backendSessionId, setBackendSessionId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const max = difficultyMax(difficulty);
+  const max = maxAttempts;
   const remaining = max > 0 ? Math.max(0, max - attempts) : Infinity;
   const suggestedMid = useMemo(() => midOf(low, high), [low, high]);
 
-  // Auto-start in daily mode
   useEffect(() => {
-    if (daily && phase === "playing" && secret === 0) {
-      startGame("operative", true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    let mounted = true;
+    isBackendAvailable().then((ok) => {
+      if (!mounted) return;
+      setBackendEnabled(ok);
+      setBackendChecked(true);
+    });
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  // Live timer
+  useEffect(() => {
+    if (daily && phase === "playing" && secret === 0) {
+      void startGame("operative", true);
+    }
+  }, []);
+
   useEffect(() => {
     if (phase !== "playing" || !startedAt) return;
     const id = setInterval(() => setElapsed(Date.now() - startedAt), 100);
     return () => clearInterval(id);
   }, [phase, startedAt]);
 
-  function startGame(d: Difficulty, isDaily = false) {
+  async function startGame(d: Difficulty, isDaily = false) {
     setDifficulty(d);
-    const sec = isDaily ? dailySeed() : genSecret();
+    const useBackend = backendEnabled && !isDaily;
+    let sec = isDaily ? dailySeed() : genSecret();
+    let maxAttempts = difficultyMax(d);
+
+    if (useBackend) {
+      try {
+        const started = await startBackendGame(player, d);
+        setBackendSessionId(started.sessionId);
+        maxAttempts = started.maxAttempts;
+      } catch {
+        setBackendSessionId(null);
+      }
+    } else {
+      setBackendSessionId(null);
+    }
+
     setSecret(sec);
     setAttempts(0);
+    setMaxAttempts(maxAttempts);
     setWon(false);
     setLow(1);
     setHigh(100);
@@ -77,7 +107,8 @@ export function GameSession({ player, onExit, daily = false }: Props) {
     setElapsed(0);
     setHistory([
       { type: "info", text: isDaily ? `>> DESAFIO DIÁRIO :: seed do dia carregado` : `Firewall ativo. Nível: ${difficultyLabel(d)}` },
-      { type: "info", text: difficultyMax(d) > 0 ? `Tentativas disponíveis: ${difficultyMax(d)} · Ótimo teórico: ${optimalAttempts(1, 100)} (busca binária)` : `Tentativas ilimitadas · Treino livre` },
+      { type: "info", text: maxAttempts > 0 ? `Tentativas disponíveis: ${maxAttempts} · Ótimo teórico: ${optimalAttempts(1, 100)} (busca binária)` : `Tentativas ilimitadas · Treino livre` },
+      { type: "scan", text: useBackend ? "Back-end C conectado: sessão validada via API." : "Back-end offline: usando modo local no front-end." },
       { type: "scan", text: `Range inicial: [1 — 100]. Sugestão estratégica: comece por 50.` },
     ]);
     setPhase("playing");
@@ -91,7 +122,7 @@ export function GameSession({ player, onExit, daily = false }: Props) {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [history]);
 
-  function submitGuess(e: React.FormEvent) {
+  async function submitGuess(e: React.FormEvent) {
     e.preventDefault();
     const n = parseInt(guess, 10);
     setGuess("");
@@ -99,6 +130,46 @@ export function GameSession({ player, onExit, daily = false }: Props) {
       setHistory((h) => [...h, { type: "err", text: "Entrada inválida. Digite um número de 1 a 100." }]);
       return;
     }
+    if (backendSessionId) {
+      try {
+        const result = await submitBackendGuess(backendSessionId, n);
+        const newAttempts = result.attempts;
+        setAttempts(newAttempts);
+
+        if (result.hint === "lower") {
+          setHigh((h) => Math.min(h, n - 1));
+        } else if (result.hint === "higher") {
+          setLow((l) => Math.max(l, n + 1));
+        }
+
+        if (result.won) {
+          setSecret(result.secret ?? secret);
+          setHistory((h) => [
+            ...h,
+            { type: "info", text: `Tentativa ${newAttempts}: ${n}` },
+            { type: "success", text: `ACESSO CONCEDIDO. Código correto: ${result.secret ?? "??"}` },
+          ]);
+          finalize(newAttempts, true, result.secret ?? secret, result.rating);
+          return;
+        }
+
+        const hint: Feedback = result.hint === "lower"
+          ? { type: "warn", text: "Porta acima do alvo. Recuando no range..." }
+          : { type: "scan", text: "Código abaixo. Scanning porta superior..." };
+        setHistory((h) => [...h, { type: "info", text: `Tentativa ${newAttempts}: ${n}` }, hint]);
+
+        if (result.finished) {
+          setSecret(result.secret ?? secret);
+          setHistory((h) => [...h, { type: "fail", text: `FIREWALL ATIVO. ACESSO NEGADO. Código era: ${result.secret ?? "??"}` }]);
+          finalize(newAttempts, false, result.secret ?? secret, result.rating);
+        }
+        return;
+      } catch {
+        setHistory((h) => [...h, { type: "err", text: "Falha de comunicação com o back-end. Continuando em modo local." }]);
+        setBackendSessionId(null);
+      }
+    }
+
     const newAttempts = attempts + 1;
     setAttempts(newAttempts);
 
@@ -131,15 +202,15 @@ export function GameSession({ player, onExit, daily = false }: Props) {
     }
   }
 
-  function finalize(att: number, victory: boolean) {
+  function finalize(att: number, victory: boolean, resolvedSecret = secret, backendRating?: string) {
     const tempoMs = Date.now() - startedAt;
     const sessao: Sessao = {
       jogador: player,
       dificuldade: difficultyLabel(difficulty),
-      segredo: secret,
+      segredo: resolvedSecret,
       tentativas: att,
       venceu: victory,
-      rating: calcRating(att, victory),
+      rating: backendRating ?? calcRating(att, victory),
       timestamp: nowTimestamp(),
       tempoMs,
       modo: daily ? "daily" : "normal",
@@ -161,7 +232,7 @@ export function GameSession({ player, onExit, daily = false }: Props) {
             return (
               <button
                 key={d.id}
-                onClick={() => startGame(d.id)}
+                onClick={() => void startGame(d.id)}
                 className="group text-left rounded-md border border-border bg-black/40 hover:bg-primary/5 hover:border-primary transition-all p-4 hover:translate-x-1 duration-200"
               >
                 <div className="flex items-center justify-between">
@@ -194,7 +265,7 @@ export function GameSession({ player, onExit, daily = false }: Props) {
     return (
       <Terminal
         title={`SESSION // ${difficultyLabel(difficulty).toUpperCase()}${daily ? " // DAILY" : ""}`}
-        status={`${max > 0 ? `${remaining} RESTANTES` : "ILIMITADO"} · ${seconds}s`}
+        status={`${max > 0 ? `${remaining} RESTANTES` : "ILIMITADO"} · ${seconds}s${backendChecked ? ` · API:${backendSessionId ? "ON" : backendEnabled ? "READY" : "OFF"}` : ""}`}
       >
         {/* HUD: Range visual + sugestão */}
         <div className="mb-4 rounded-md border border-border bg-black/40 p-3">

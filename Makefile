@@ -1,17 +1,16 @@
 # -----------------------------------------------------------------------
 #  Terminal Breach — Makefile
-#  Compatível com Linux, macOS e Windows (MinGW/MSYS2)
 # -----------------------------------------------------------------------
 
 CC      = gcc
-CFLAGS  = -Wall -Wextra -std=c11
+CFLAGS  = -Wall -Wextra -std=c11 -Iinclude
 LDFLAGS = -lm
 
 # Nome do executável (no Windows recebe .exe automaticamente pelo gcc)
 TARGET  = terminal_breach
 
 # Fontes e objetos
-SRCS    = main.c game.c db.c stats.c ghost_mode.c leaderboard.c
+SRCS    = src/main.c src/game.c src/db.c src/stats.c src/ghost_mode.c src/leaderboard.c src/http_server.c
 OBJS    = $(SRCS:.c=.o)
 
 # Diretório de dados (criado em tempo de execução pelo db.c se necessário,
@@ -45,7 +44,7 @@ clean:
 	rm -f $(OBJS) $(TARGET) $(TARGET).exe
 	@echo "  [OK] Arquivos temporarios removidos."
 
-# Limpa também o banco de dados (use com cuidado!)
+# Limpa o banco de dados
 clean-data:
 	rm -f $(DATADIR)/sessions.json
 	@echo "  [OK] Banco de dados removido."

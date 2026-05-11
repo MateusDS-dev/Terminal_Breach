@@ -7,6 +7,7 @@
 #include "stats.h"
 #include "leaderboard.h"
 #include "ghost_mode.h"
+#include "http_server.h"
 
 static void limpar_tela(void)
 {
@@ -94,6 +95,16 @@ static void exibir_menu(const char *nome)
 /* ================================================================== */
 int main(int argc, char *argv[])
 {
+    /* Modo API HTTP */
+    if (argc >= 2 && strcmp(argv[1], "--api") == 0) {
+        int port = 8080;
+        if (argc >= 3) {
+            int p = atoi(argv[2]);
+            if (p > 0 && p <= 65535) port = p;
+        }
+        return http_server_run(port);
+    }
+
     /* Modo Ghost */
     if (argc >= 2 && strcmp(argv[1], "--ghost") == 0) {
         limpar_tela();
