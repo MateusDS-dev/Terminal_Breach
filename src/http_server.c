@@ -1,5 +1,6 @@
 #include "http_server.h"
 #include "game.h"
+#include "db.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -123,6 +124,151 @@ static api_session_t *find_session(const char *session_id)
         }
     }
     return NULL;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Multiplayer (salas) + persistencia web em data/sessions.json       */
+/* ------------------------------------------------------------------ */
+
+#define MAX_MP_ROOMS 24
+#define ROOM_CODE_LEN 8
+
+typedef struct {
+    int in_use;
+    char room_id[ROOM_CODE_LEN];
+    char host[64];
+    char guest[64];
+    int has_guest;
+    char difficulty[16];
+    int secret;
+    int max_attempts;
+    int max_total_guesses;
+    int total_guesses;
+    int turn; /* 0 = host, 1 = guest */
+    int finished;
+    char winner[64];
+    int attempts_host;
+    int attempts_guest;
+    int last_guess;
+    char last_hint[12];
+} mp_room_t;
+
+static mp_room_t g_rooms[MAX_MP_ROOMS];
+
+static const char *slug_to_dificuldade_label(const char *slug)
+{
+    if (strcmp(slug, "analyst") == 0) return "Analista";
+    if (strcmp(slug, "operative") == 0) return "Operativo";
+    if (strcmp(slug, "ghost") == 0) return "Ghost";
+    return "Script Kiddie";
+}
+
+static void mp_build_room_code(char out[ROOM_CODE_LEN])
+{
+    for (int tries = 0; tries < 50; tries++) {
+        unsigned r = (unsigned)(rand() & 0xffffff);
+        snprintf(out, ROOM_CODE_LEN, "%06X", r % 0x1000000);
+        int dup = 0;
+        for (int i = 0; i < MAX_MP_ROOMS; i++) {
+            if (g_rooms[i].in_use && strcmp(g_rooms[i].room_id, out) == 0) {
+                dup = 1;
+                break;
+            }
+        }
+        if (!dup) return;
+    }
+    snprintf(out, ROOM_CODE_LEN, "%06lX", (unsigned long)time(NULL) & 0xffffff);
+}
+
+static mp_room_t *mp_find_room(const char *room_id)
+{
+    for (int i = 0; i < MAX_MP_ROOMS; i++) {
+        if (g_rooms[i].in_use && strcmp(g_rooms[i].room_id, room_id) == 0) return &g_rooms[i];
+    }
+    return NULL;
+}
+
+static mp_room_t *mp_create_room(const char *host, const char *difficulty)
+{
+    for (int i = 0; i < MAX_MP_ROOMS; i++) {
+        if (!g_rooms[i].in_use) {
+            mp_room_t *r = &g_rooms[i];
+            memset(r, 0, sizeof(*r));
+            r->in_use = 1;
+            mp_build_room_code(r->room_id);
+            strncpy(r->host, host, sizeof(r->host) - 1);
+            strncpy(r->difficulty, difficulty, sizeof(r->difficulty) - 1);
+            r->secret = (rand() % 100) + 1;
+            r->max_attempts = max_attempts_from_id(difficulty);
+            if (r->max_attempts > 0) r->max_total_guesses = r->max_attempts * 2;
+            else r->max_total_guesses = 40;
+            r->turn = 0;
+            strncpy(r->last_hint, "none", sizeof(r->last_hint) - 1);
+            return r;
+        }
+    }
+    return NULL;
+}
+
+static int json_get_bool(const char *body, const char *key, int *out)
+{
+    char pattern[64];
+    snprintf(pattern, sizeof(pattern), "\"%s\":", key);
+    char *start = strstr((char *)body, pattern);
+    if (!start) return 0;
+    start += strlen(pattern);
+    while (*start == ' ' || *start == '\t') start++;
+    if (strncmp(start, "true", 4) == 0) {
+        *out = 1;
+        return 1;
+    }
+    if (strncmp(start, "false", 5) == 0) {
+        *out = 0;
+        return 1;
+    }
+    return 0;
+}
+
+static void mp_save_result_sessions(mp_room_t *room)
+{
+    sessao_t s;
+    memset(&s, 0, sizeof(s));
+    const char *label = slug_to_dificuldade_label(room->difficulty);
+
+    if (room->winner[0] != '\0') {
+        memset(&s, 0, sizeof(s));
+        strncpy(s.jogador, room->winner, sizeof(s.jogador) - 1);
+        strncpy(s.dificuldade, label, sizeof(s.dificuldade) - 1);
+        s.segredo = room->secret;
+        s.venceu = 1;
+        if (strcmp(room->winner, room->host) == 0) s.tentativas = room->attempts_host;
+        else s.tentativas = room->attempts_guest;
+        strncpy(s.rating, calcular_rating(s.tentativas, 1), sizeof(s.rating) - 1);
+        sessao_definir_timestamp(&s);
+        db_salvar_sessao(&s);
+        return;
+    }
+
+    /* Empate / esgotou tentativas da sala */
+    memset(&s, 0, sizeof(s));
+    strncpy(s.jogador, room->host, sizeof(s.jogador) - 1);
+    strncpy(s.dificuldade, label, sizeof(s.dificuldade) - 1);
+    s.segredo = room->secret;
+    s.tentativas = room->attempts_host;
+    s.venceu = 0;
+    strncpy(s.rating, calcular_rating(s.tentativas, 0), sizeof(s.rating) - 1);
+    sessao_definir_timestamp(&s);
+    db_salvar_sessao(&s);
+
+    memset(&s, 0, sizeof(s));
+    strncpy(s.jogador, room->guest, sizeof(s.jogador) - 1);
+    strncpy(s.dificuldade, label, sizeof(s.dificuldade) - 1);
+    s.segredo = room->secret;
+    s.tentativas = room->attempts_guest;
+    s.venceu = 0;
+    strncpy(s.rating, calcular_rating(s.tentativas, 0), sizeof(s.rating) - 1);
+    sessao_definir_timestamp(&s);
+    db_salvar_sessao(&s);
 }
 
 static void send_json(socket_t client, int status, const char *body)
@@ -251,11 +397,290 @@ static void handle_guess(socket_t client, const char *body)
     send_json(client, 200, resp);
 }
 
+static void extract_query_room_id(const char *path, char *out, size_t out_size)
+{
+    out[0] = '\0';
+    const char *q = strstr(path, "roomId=");
+    if (!q) return;
+    q += 7;
+    size_t i = 0;
+    while (*q && *q != ' ' && *q != '&' && i + 1 < out_size) out[i++] = *q++;
+    out[i] = '\0';
+}
+
+static void handle_session_save(socket_t client, const char *body)
+{
+    sessao_t s;
+    memset(&s, 0, sizeof(s));
+
+    if (!json_get_string(body, "jogador", s.jogador, sizeof(s.jogador)) ||
+        !json_get_string(body, "dificuldade", s.dificuldade, sizeof(s.dificuldade))) {
+        send_json(client, 400, "{\"error\":\"invalid_payload\"}");
+        return;
+    }
+    if (!json_get_int(body, "segredo", &s.segredo) || !json_get_int(body, "tentativas", &s.tentativas)) {
+        send_json(client, 400, "{\"error\":\"invalid_payload\"}");
+        return;
+    }
+    int v = 0;
+    if (!json_get_bool(body, "venceu", &v)) {
+        send_json(client, 400, "{\"error\":\"invalid_payload\"}");
+        return;
+    }
+    s.venceu = v;
+    if (!json_get_string(body, "rating", s.rating, sizeof(s.rating))) {
+        strncpy(s.rating, calcular_rating(s.tentativas, s.venceu), sizeof(s.rating) - 1);
+    }
+    if (!json_get_string(body, "timestamp", s.timestamp, sizeof(s.timestamp))) {
+        sessao_definir_timestamp(&s);
+    }
+
+    db_salvar_sessao(&s);
+    send_json(client, 200, "{\"ok\":true}");
+}
+
+static void handle_room_create(socket_t client, const char *body)
+{
+    char host[64] = {0};
+    char difficulty[16] = {0};
+    if (!json_get_string(body, "host", host, sizeof(host))) {
+        strncpy(host, "Anonimo", sizeof(host) - 1);
+    }
+    if (!json_get_string(body, "difficulty", difficulty, sizeof(difficulty))) {
+        strncpy(difficulty, "operative", sizeof(difficulty) - 1);
+    }
+
+    mp_room_t *r = mp_create_room(host, difficulty);
+    if (!r) {
+        send_json(client, 500, "{\"error\":\"room_limit\"}");
+        return;
+    }
+
+    char resp[256];
+    snprintf(
+        resp,
+        sizeof(resp),
+        "{\"roomId\":\"%s\",\"maxTotalGuesses\":%d,\"maxAttempts\":%d}",
+        r->room_id,
+        r->max_total_guesses,
+        r->max_attempts
+    );
+    send_json(client, 200, resp);
+}
+
+static void handle_room_join(socket_t client, const char *body)
+{
+    char room_id[ROOM_CODE_LEN] = {0};
+    char guest[64] = {0};
+    if (!json_get_string(body, "roomId", room_id, sizeof(room_id)) || !json_get_string(body, "guest", guest, sizeof(guest))) {
+        send_json(client, 400, "{\"error\":\"invalid_payload\"}");
+        return;
+    }
+
+    mp_room_t *r = mp_find_room(room_id);
+    if (!r) {
+        send_json(client, 404, "{\"error\":\"room_not_found\"}");
+        return;
+    }
+    if (r->has_guest) {
+        send_json(client, 409, "{\"error\":\"room_full\"}");
+        return;
+    }
+    if (strcmp(guest, r->host) == 0) {
+        send_json(client, 400, "{\"error\":\"same_as_host\"}");
+        return;
+    }
+
+    strncpy(r->guest, guest, sizeof(r->guest) - 1);
+    r->has_guest = 1;
+    r->turn = 0;
+    char resp[320];
+    snprintf(resp, sizeof(resp), "{\"ok\":true,\"host\":\"%s\"}", r->host);
+    send_json(client, 200, resp);
+}
+
+static void handle_room_state_get(socket_t client, const char *path)
+{
+    char room_id[ROOM_CODE_LEN] = {0};
+    extract_query_room_id(path, room_id, sizeof(room_id));
+    if (room_id[0] == '\0') {
+        send_json(client, 400, "{\"error\":\"missing_roomId\"}");
+        return;
+    }
+
+    mp_room_t *r = mp_find_room(room_id);
+    if (!r) {
+        send_json(client, 404, "{\"error\":\"room_not_found\"}");
+        return;
+    }
+
+    const char *turn_name = "host";
+    if (r->turn == 1) turn_name = "guest";
+    if (!r->has_guest) turn_name = "waiting";
+
+    char resp[768];
+    if (r->finished) {
+        snprintf(
+            resp,
+            sizeof(resp),
+            "{\"roomId\":\"%s\",\"difficulty\":\"%s\",\"host\":\"%s\",\"guest\":\"%s\",\"guestJoined\":%s,"
+            "\"finished\":true,\"turn\":\"%s\",\"lastGuess\":%d,\"lastHint\":\"%s\","
+            "\"totalGuesses\":%d,\"maxTotalGuesses\":%d,\"winner\":\"%s\",\"secret\":%d,"
+            "\"attemptsHost\":%d,\"attemptsGuest\":%d}",
+            r->room_id,
+            r->difficulty,
+            r->host,
+            r->guest,
+            r->has_guest ? "true" : "false",
+            turn_name,
+            r->last_guess,
+            r->last_hint,
+            r->total_guesses,
+            r->max_total_guesses,
+            r->winner,
+            r->secret,
+            r->attempts_host,
+            r->attempts_guest
+        );
+    } else {
+        snprintf(
+            resp,
+            sizeof(resp),
+            "{\"roomId\":\"%s\",\"difficulty\":\"%s\",\"host\":\"%s\",\"guest\":\"%s\",\"guestJoined\":%s,"
+            "\"finished\":false,\"turn\":\"%s\",\"lastGuess\":%d,\"lastHint\":\"%s\","
+            "\"totalGuesses\":%d,\"maxTotalGuesses\":%d,\"winner\":\"%s\",\"secret\":null,"
+            "\"attemptsHost\":%d,\"attemptsGuest\":%d}",
+            r->room_id,
+            r->difficulty,
+            r->host,
+            r->guest,
+            r->has_guest ? "true" : "false",
+            turn_name,
+            r->last_guess,
+            r->last_hint,
+            r->total_guesses,
+            r->max_total_guesses,
+            r->winner,
+            r->attempts_host,
+            r->attempts_guest
+        );
+    }
+    send_json(client, 200, resp);
+}
+
+static void handle_room_guess(socket_t client, const char *body)
+{
+    char room_id[ROOM_CODE_LEN] = {0};
+    char player[64] = {0};
+    int guess = 0;
+
+    if (!json_get_string(body, "roomId", room_id, sizeof(room_id)) ||
+        !json_get_string(body, "player", player, sizeof(player)) ||
+        !json_get_int(body, "guess", &guess)) {
+        send_json(client, 400, "{\"error\":\"invalid_payload\"}");
+        return;
+    }
+
+    mp_room_t *r = mp_find_room(room_id);
+    if (!r) {
+        send_json(client, 404, "{\"error\":\"room_not_found\"}");
+        return;
+    }
+    if (!r->has_guest) {
+        send_json(client, 400, "{\"error\":\"waiting_guest\"}");
+        return;
+    }
+    if (r->finished) {
+        send_json(client, 400, "{\"error\":\"room_finished\"}");
+        return;
+    }
+
+    int is_host = (strcmp(player, r->host) == 0);
+    int is_guest = (strcmp(player, r->guest) == 0);
+    if (!is_host && !is_guest) {
+        send_json(client, 403, "{\"error\":\"unknown_player\"}");
+        return;
+    }
+    int want_turn = is_host ? 0 : 1;
+    if (r->turn != want_turn) {
+        send_json(client, 403, "{\"error\":\"wrong_turn\"}");
+        return;
+    }
+
+    if (guess < 1 || guess > 100) {
+        send_json(client, 400, "{\"error\":\"invalid_guess\"}");
+        return;
+    }
+
+    r->total_guesses++;
+    if (is_host) r->attempts_host++;
+    else r->attempts_guest++;
+
+    r->last_guess = guess;
+
+    if (guess == r->secret) {
+        strncpy(r->last_hint, "correct", sizeof(r->last_hint) - 1);
+        r->finished = 1;
+        strncpy(r->winner, player, sizeof(r->winner) - 1);
+        mp_save_result_sessions(r);
+        char resp[384];
+        snprintf(
+            resp,
+            sizeof(resp),
+            "{\"ok\":true,\"finished\":true,\"won\":true,\"hint\":\"correct\",\"secret\":%d,\"winner\":\"%s\","
+            "\"attemptsHost\":%d,\"attemptsGuest\":%d}",
+            r->secret,
+            r->winner,
+            r->attempts_host,
+            r->attempts_guest
+        );
+        send_json(client, 200, resp);
+        return;
+    }
+
+    if (guess > r->secret) strncpy(r->last_hint, "lower", sizeof(r->last_hint) - 1);
+    else strncpy(r->last_hint, "higher", sizeof(r->last_hint) - 1);
+
+    if (r->total_guesses >= r->max_total_guesses) {
+        r->finished = 1;
+        r->winner[0] = '\0';
+        mp_save_result_sessions(r);
+        char resp[384];
+        snprintf(
+            resp,
+            sizeof(resp),
+            "{\"ok\":true,\"finished\":true,\"won\":false,\"hint\":\"%s\",\"secret\":%d,"
+            "\"winner\":\"\",\"attemptsHost\":%d,\"attemptsGuest\":%d}",
+            r->last_hint,
+            r->secret,
+            r->attempts_host,
+            r->attempts_guest
+        );
+        send_json(client, 200, resp);
+        return;
+    }
+
+    r->turn = (r->turn == 0) ? 1 : 0;
+    char resp[320];
+    snprintf(
+        resp,
+        sizeof(resp),
+        "{\"ok\":true,\"finished\":false,\"hint\":\"%s\",\"turn\":\"%s\",\"totalGuesses\":%d,"
+        "\"attemptsHost\":%d,\"attemptsGuest\":%d}",
+        r->last_hint,
+        r->turn == 0 ? "host" : "guest",
+        r->total_guesses,
+        r->attempts_host,
+        r->attempts_guest
+    );
+    send_json(client, 200, resp);
+}
+
 static void handle_request(socket_t client, const char *request)
 {
     char method[16] = {0};
-    char path[128] = {0};
-    sscanf(request, "%15s %127s", method, path);
+    char path[256] = {0};
+    sscanf(request, "%15s %255s", method, path);
 
     const char *body = strstr(request, "\r\n\r\n");
     body = body ? body + 4 : "";
@@ -270,6 +695,11 @@ static void handle_request(socket_t client, const char *request)
         return;
     }
 
+    if (strcmp(method, "GET") == 0 && strncmp(path, "/api/room/state", 15) == 0) {
+        handle_room_state_get(client, path);
+        return;
+    }
+
     if (strcmp(method, "POST") != 0) {
         send_json(client, 405, "{\"error\":\"method_not_allowed\"}");
         return;
@@ -281,6 +711,22 @@ static void handle_request(socket_t client, const char *request)
     }
     if (strcmp(path, "/api/game/guess") == 0) {
         handle_guess(client, body);
+        return;
+    }
+    if (strcmp(path, "/api/session/save") == 0) {
+        handle_session_save(client, body);
+        return;
+    }
+    if (strcmp(path, "/api/room/create") == 0) {
+        handle_room_create(client, body);
+        return;
+    }
+    if (strcmp(path, "/api/room/join") == 0) {
+        handle_room_join(client, body);
+        return;
+    }
+    if (strcmp(path, "/api/room/guess") == 0) {
+        handle_room_guess(client, body);
         return;
     }
 
@@ -325,7 +771,8 @@ int http_server_run(int port)
     }
 
     printf("[API] Terminal Breach API ouvindo em http://localhost:%d\n", port);
-    printf("[API] Endpoints: GET /health, POST /api/game/start, POST /api/game/guess\n");
+    printf("[API] Endpoints: GET /health, POST /api/game/{start,guess}, POST /api/session/save,\n");
+    printf("[API]           POST /api/room/{create,join,guess}, GET /api/room/state?roomId=...\n");
 
     while (1) {
         socket_t client = accept(server_fd, NULL, NULL);

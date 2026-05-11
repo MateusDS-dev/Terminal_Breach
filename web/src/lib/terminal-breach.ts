@@ -38,7 +38,7 @@ export interface Sessao {
   rating: string;
   timestamp: string;
   tempoMs?: number;
-  modo?: "normal" | "daily";
+  modo?: "normal" | "daily" | "pvp";
 }
 
 const STORAGE_KEY = "terminal_breach_audit_log_v1";

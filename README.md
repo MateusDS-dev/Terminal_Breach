@@ -40,7 +40,8 @@ O projeto foi estruturado em duas camadas, com comunicação real entre front-en
 - Modo diário e modo fantasma.
 - Integração real entre front-end e API em C.
 - Fallback local no front quando API estiver offline.
-- Base pronta para evolução para multiplayer.
+- **Multiplayer (PvP)** por código de sala: turnos alternados no mesmo segredo (menu “Multiplayer”).
+- **Persistência**: ao terminar partidas na web, a API pode gravar em `data/sessions.json` (mesmo arquivo do modo terminal), via `POST /api/session/save`.
 
 ---
 
@@ -54,11 +55,17 @@ Frontend (React/TSX) --> API HTTP (C) --> Lógica de jogo
          --> UI, HUD, histórico, score e relatórios
 ```
 
-Fluxo principal:
+Fluxo principal (solo na web):
 1. O front checa `GET /health`.
 2. O jogador inicia partida via `POST /api/game/start`.
 3. Cada palpite vai para `POST /api/game/guess`.
-4. A API retorna estado, hint e finalização da sessão.
+4. Ao encerrar, o front pode enviar `POST /api/session/save` para anexar a sessão em `data/sessions.json`.
+
+Fluxo **PvP** (dois jogadores):
+1. Host: `POST /api/room/create` → recebe `roomId`.
+2. Convidado: `POST /api/room/join` com o código.
+3. Ambos consultam `GET /api/room/state?roomId=...` (polling) e enviam `POST /api/room/guess` na sua vez.
+4. Ao fim, o servidor grava o resultado em `data/sessions.json` (vitória ou duas derrotas em caso de empate por esgotamento).
 
 ---
 
@@ -242,6 +249,35 @@ Resposta (exemplo):
 
 Quando a partida termina, a resposta pode incluir `secret` e `rating`.
 
+### `POST /api/session/save`
+
+Persiste uma sessão no arquivo `data/sessions.json` (reutiliza `db_salvar_sessao`).
+
+Body (exemplo):
+
+```json
+{
+  "jogador": "neo",
+  "dificuldade": "Operativo",
+  "segredo": 42,
+  "tentativas": 5,
+  "venceu": true,
+  "rating": "Ghost",
+  "timestamp": "2026-05-11 14:30:00"
+}
+```
+
+### Multiplayer — salas
+
+| Método | Caminho | Descrição |
+|--------|---------|-----------|
+| `POST` | `/api/room/create` | Body: `{ "host": "nome", "difficulty": "operative" }` → `{ "roomId", "maxTotalGuesses", "maxAttempts" }` |
+| `POST` | `/api/room/join` | Body: `{ "roomId": "ABC123", "guest": "nome" }` |
+| `GET` | `/api/room/state?roomId=ABC123` | Estado da sala (turno, último palpite, `finished`, etc.) |
+| `POST` | `/api/room/guess` | Body: `{ "roomId", "player", "guess" }` — só na vez do jogador |
+
+Regras resumidas: **mesmo segredo** para os dois; **turnos alternados**; limite combinado de palpites (`2 × maxAttempts` do nível, ou 40 no estilo “ilimitado” da sala).
+
 ---
 
 ## Troubleshooting
@@ -259,8 +295,8 @@ Quando a partida termina, a resposta pode incluir `secret` e `rating`.
 
 ## Roadmap
 
-- Multiplayer com salas (`roomId`) e controle de turnos.
-- Persistência real das sessões da API (SQLite/PostgreSQL).
+- Multiplayer em tempo real (WebSocket) em vez de polling HTTP.
+- Persistência das sessões da API em banco (SQLite/PostgreSQL).
 - Ranking global consolidado no back-end.
 - Autenticação de jogadores.
 - Comunicação em tempo real com WebSocket.

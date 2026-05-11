@@ -18,7 +18,7 @@ import {
   midOf,
   dailySeed,
 } from "@/lib/terminal-breach";
-import { isBackendAvailable, startBackendGame, submitBackendGuess } from "@/lib/backend-api";
+import { isBackendAvailable, recordWebSession, startBackendGame, submitBackendGuess } from "@/lib/backend-api";
 
 interface Props {
   player: string;
@@ -216,6 +216,9 @@ export function GameSession({ player, onExit, daily = false }: Props) {
       modo: daily ? "daily" : "normal",
     };
     saveSession(sessao);
+    void recordWebSession(sessao).catch(() => {
+      /* API offline ou erro de rede: sessão permanece só no localStorage */
+    });
     setFinalSession(sessao);
     setWon(victory);
     setTimeout(() => setPhase("result"), 700);

@@ -7,6 +7,7 @@ import { GameSession } from "@/components/terminal/GameSession";
 import { StatsReport } from "@/components/terminal/StatsReport";
 import { Leaderboard } from "@/components/terminal/Leaderboard";
 import { GhostMode } from "@/components/terminal/GhostMode";
+import { MultiplayerSession } from "@/components/terminal/MultiplayerSession";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type View = "login" | "menu" | "play" | "daily" | "stats" | "leaderboard" | "ghost";
+type View = "login" | "menu" | "play" | "daily" | "stats" | "leaderboard" | "ghost" | "multiplayer";
 
 const ASCII = `
 ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
@@ -93,6 +94,7 @@ function Index() {
               <MenuBtn n={3} label="Relatório de auditoria"  desc="Estatísticas + histograma"          onClick={() => setView("stats")} />
               <MenuBtn n={4} label="Placar de líderes"       desc="Top 10 por SCORE"                   onClick={() => setView("leaderboard")} />
               <MenuBtn n={5} label="Modo Fantasma"           desc="Busca binária automática"           onClick={() => setView("ghost")} accent />
+              <MenuBtn n={6} label="Multiplayer (PvP)"       desc="Sala por código · API C"            onClick={() => setView("multiplayer")} accent />
             </div>
             <div className="mt-6 flex justify-between items-center">
               <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">SCORE = (1000 × mult / tent) + bônus tempo</span>
@@ -108,6 +110,7 @@ function Index() {
         {view === "stats" && <StatsReport onBack={() => setView("menu")} />}
         {view === "leaderboard" && <Leaderboard onBack={() => setView("menu")} />}
         {view === "ghost" && <GhostMode onBack={() => setView("menu")} />}
+        {view === "multiplayer" && <MultiplayerSession player={player} onExit={() => setView("menu")} />}
 
         <footer className="mt-6 text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
           Terminal Breach · Web port · Baseado no projeto C de <span className="text-primary/80">MateusDS-dev</span>
