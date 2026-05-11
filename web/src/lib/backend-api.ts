@@ -1,6 +1,94 @@
 import type { Difficulty, Sessao } from "@/lib/terminal-breach";
 
-const API_BASE = (import.meta.env.VITE_BACKEND_URL as string | undefined) ?? "http://localhost:8080";
+/**
+ * URL configurada (sem probe). Ordem:
+ * 1) `VITE_BACKEND_URL`
+ * 2) Mesmo hostname da página + :8080 (modo Network do Vite)
+ * 3) `http://localhost:8080`
+ */
+function buildConfiguredApiBase(): string {
+  const env = (import.meta.env.VITE_BACKEND_URL as string | undefined)?.trim();
+  if (env) return env.replace(/\/$/, "");
+
+  if (typeof window !== "undefined" && window.location?.hostname) {
+    const h = window.location.hostname;
+    if (h !== "localhost" && h !== "127.0.0.1") {
+      return `${window.location.protocol}//${h}:8080`;
+    }
+  }
+  return "http://localhost:8080";
+}
+
+/** Base que respondeu `/health` com sucesso (evita IPv6 localhost vs IPv4 do servidor C). */
+let cachedProbeBase: string | null = null;
+let probeInFlight: Promise<string | null> | null = null;
+
+function uniqueApiCandidates(): string[] {
+  const list: string[] = [];
+  const add = (u: string) => {
+    const x = u.replace(/\/$/, "");
+    if (x && !list.includes(x)) list.push(x);
+  };
+  add(buildConfiguredApiBase());
+  /* localhost no Windows costuma resolver para ::1; o servidor C em AF_INET escuta em 0.0.0.0 (IPv4) */
+  add("http://127.0.0.1:8080");
+  add("http://localhost:8080");
+  return list;
+}
+
+async function fetchHealthOk(base: string): Promise<boolean> {
+  const ac = new AbortController();
+  const timer = globalThis.setTimeout(() => ac.abort(), 6500);
+  try {
+    const resp = await fetch(`${base}/health`, {
+      method: "GET",
+      signal: ac.signal,
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    });
+    if (!resp.ok) return false;
+    const data = (await resp.json().catch(() => ({}))) as { ok?: boolean };
+    return Boolean(data.ok);
+  } catch {
+    return false;
+  } finally {
+    globalThis.clearTimeout(timer);
+  }
+}
+
+/**
+ * Descobre em qual URL a API está de pé e guarda em cache.
+ * Tenta, por exemplo, `http://localhost:8080` e `http://127.0.0.1:8080`.
+ */
+export async function probeBackend(): Promise<string | null> {
+  if (cachedProbeBase) return cachedProbeBase;
+  if (probeInFlight) return await probeInFlight;
+
+  probeInFlight = (async (): Promise<string | null> => {
+    for (const base of uniqueApiCandidates()) {
+      if (await fetchHealthOk(base)) {
+        cachedProbeBase = base;
+        return base;
+      }
+    }
+    return null;
+  })();
+
+  try {
+    return await probeInFlight;
+  } finally {
+    probeInFlight = null;
+  }
+}
+
+/** URL a usar nas requisições (usa cache do probe quando existir). */
+export function getApiBase(): string {
+  return cachedProbeBase ?? buildConfiguredApiBase();
+}
+
+export async function isBackendAvailable(): Promise<boolean> {
+  return (await probeBackend()) != null;
+}
 
 export interface BackendStartResponse {
   sessionId: string;
@@ -25,19 +113,15 @@ async function parseJsonOrThrow(resp: Response) {
   return data;
 }
 
-export async function isBackendAvailable(): Promise<boolean> {
-  try {
-    const resp = await fetch(`${API_BASE}/health`);
-    if (!resp.ok) return false;
-    const data = (await resp.json()) as { ok?: boolean };
-    return Boolean(data.ok);
-  } catch {
-    return false;
-  }
+async function apiBaseForRequest(): Promise<string> {
+  const found = await probeBackend();
+  if (found) return found;
+  return getApiBase();
 }
 
 export async function startBackendGame(player: string, difficulty: Difficulty): Promise<BackendStartResponse> {
-  const resp = await fetch(`${API_BASE}/api/game/start`, {
+  const base = await apiBaseForRequest();
+  const resp = await fetch(`${base}/api/game/start`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ player, difficulty }),
@@ -46,7 +130,8 @@ export async function startBackendGame(player: string, difficulty: Difficulty): 
 }
 
 export async function submitBackendGuess(sessionId: string, guess: number): Promise<BackendGuessResponse> {
-  const resp = await fetch(`${API_BASE}/api/game/guess`, {
+  const base = await apiBaseForRequest();
+  const resp = await fetch(`${base}/api/game/guess`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sessionId, guess }),
@@ -56,7 +141,9 @@ export async function submitBackendGuess(sessionId: string, guess: number): Prom
 
 /** Grava a sessão no mesmo `data/sessions.json` que o programa em C usa (quando a API está no ar). */
 export async function recordWebSession(s: Sessao): Promise<void> {
-  const resp = await fetch(`${API_BASE}/api/session/save`, {
+  const base = await probeBackend();
+  if (!base) return;
+  const resp = await fetch(`${base}/api/session/save`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -110,7 +197,8 @@ export interface RoomGuessResponse {
 }
 
 export async function createMultiplayerRoom(host: string, difficulty: Difficulty): Promise<RoomCreateResponse> {
-  const resp = await fetch(`${API_BASE}/api/room/create`, {
+  const base = await apiBaseForRequest();
+  const resp = await fetch(`${base}/api/room/create`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ host, difficulty }),
@@ -119,7 +207,8 @@ export async function createMultiplayerRoom(host: string, difficulty: Difficulty
 }
 
 export async function joinMultiplayerRoom(roomId: string, guest: string): Promise<{ ok: boolean; host: string }> {
-  const resp = await fetch(`${API_BASE}/api/room/join`, {
+  const base = await apiBaseForRequest();
+  const resp = await fetch(`${base}/api/room/join`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ roomId: roomId.trim().toUpperCase(), guest }),
@@ -128,13 +217,15 @@ export async function joinMultiplayerRoom(roomId: string, guest: string): Promis
 }
 
 export async function fetchRoomState(roomId: string): Promise<RoomState> {
+  const base = await apiBaseForRequest();
   const q = encodeURIComponent(roomId.trim().toUpperCase());
-  const resp = await fetch(`${API_BASE}/api/room/state?roomId=${q}`);
+  const resp = await fetch(`${base}/api/room/state?roomId=${q}`);
   return (await parseJsonOrThrow(resp)) as RoomState;
 }
 
 export async function submitRoomGuess(roomId: string, player: string, guess: number): Promise<RoomGuessResponse> {
-  const resp = await fetch(`${API_BASE}/api/room/guess`, {
+  const base = await apiBaseForRequest();
+  const resp = await fetch(`${base}/api/room/guess`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ roomId: roomId.trim().toUpperCase(), player, guess }),

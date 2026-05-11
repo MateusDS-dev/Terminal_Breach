@@ -700,6 +700,24 @@ static void handle_request(socket_t client, const char *request)
         return;
     }
 
+    /* GET em / ou rota desconhecida: 404 (evita 405 ao abrir http://IP:8080/ no navegador) */
+    if (strcmp(method, "GET") == 0) {
+        if (strcmp(path, "/") == 0) {
+            send_json(
+                client,
+                200,
+                "{\"ok\":true,\"service\":\"terminal_breach_api\",\"health\":\"/health\"}"
+            );
+            return;
+        }
+        send_json(
+            client,
+            404,
+            "{\"error\":\"not_found\",\"hint\":\"GET /health ou GET /api/room/state?roomId=...\"}"
+        );
+        return;
+    }
+
     if (strcmp(method, "POST") != 0) {
         send_json(client, 405, "{\"error\":\"method_not_allowed\"}");
         return;

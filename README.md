@@ -182,11 +182,11 @@ npm run build
 
 ## Configuração de Ambiente
 
-Por padrão, o front usa:
+Por padrão, o front usa `http://localhost:8080`.
 
-`http://localhost:8080`
+Se você abrir o Vite pelo endereço **Network** (ex.: `http://192.168.0.10:5173`), o front passa a chamar a API em **`http://192.168.0.10:8080`** automaticamente (mesmo IP, porta 8080). Assim o multiplayer e o `/health` funcionam na LAN sem configurar nada.
 
-Para apontar para outra URL, use `VITE_BACKEND_URL`.
+Para forçar uma URL fixa (outro PC, Docker, túnel), use `VITE_BACKEND_URL`.
 
 Linux/macOS:
 
@@ -290,6 +290,8 @@ Regras resumidas: **mesmo segredo** para os dois; **turnos alternados**; limite 
   - revise `VITE_BACKEND_URL`.
 - **Porta em uso**: rode API em outra porta, ex.: `--api 8090`, e ajuste `VITE_BACKEND_URL`.
 - **CORS**: a API já possui cabeçalhos de CORS para desenvolvimento local.
+- **`method_not_allowed` ao abrir `http://IP:8080/`**: em versões antigas da API, GET fora de `/health` respondia 405; atualize o binário ou use `http://IP:8080/health` para testar.
+- **Multiplayer diz que a API está off**: confirme `http://SEU_IP:8080/health` no navegador do **mesmo** dispositivo que abre o jogo; no Windows, libere o `terminal_breach.exe` no firewall (rede privada).
 
 ---
 

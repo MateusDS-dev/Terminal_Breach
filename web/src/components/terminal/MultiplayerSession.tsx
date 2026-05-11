@@ -13,6 +13,7 @@ import {
 import {
   createMultiplayerRoom,
   fetchRoomState,
+  getApiBase,
   isBackendAvailable,
   joinMultiplayerRoom,
   submitRoomGuess,
@@ -34,6 +35,7 @@ function slugToDifficulty(slug: string): Difficulty {
 
 export function MultiplayerSession({ player, onExit }: Props) {
   const [apiOk, setApiOk] = useState(false);
+  const [apiProbeUrl, setApiProbeUrl] = useState("");
   const [phase, setPhase] = useState<Phase>("lobby");
   const [role, setRole] = useState<Role>("host");
   const [roomId, setRoomId] = useState("");
@@ -47,7 +49,20 @@ export function MultiplayerSession({ player, onExit }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    isBackendAvailable().then(setApiOk);
+    setApiProbeUrl(getApiBase());
+    let cancelled = false;
+    isBackendAvailable().then((ok) => {
+      if (!cancelled) setApiOk(ok);
+    });
+    const t = window.setTimeout(() => {
+      isBackendAvailable().then((ok) => {
+        if (!cancelled) setApiOk(ok);
+      });
+    }, 800);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(t);
+    };
   }, []);
 
   useEffect(() => {
@@ -165,7 +180,18 @@ export function MultiplayerSession({ player, onExit }: Props) {
     return (
       <Terminal title="MULTIPLAYER // OFFLINE" status="API INDISPONÍVEL">
         <Line tag="ERR">O modo PvP exige o back-end com `terminal_breach --api`.</Line>
-        <Line tag="SYS">Inicie a API e recarregue a página.</Line>
+        <Line tag="SYS">
+          O front tenta, nesta ordem: URL configurada / mesmo IP:8080 / <span className="text-primary">127.0.0.1:8080</span> /{" "}
+          <span className="text-primary">localhost:8080</span> — o que responder <span className="text-primary">/health</span>{" "}
+          fica em cache.
+        </Line>
+        <Line tag="SYS">
+          Última base usada na UI: <span className="text-accent">{apiProbeUrl || getApiBase()}</span> — abra{" "}
+          <span className="text-primary">/health</span> nesse host no navegador (se falhar, a API não está escutando ou a porta não é 8080).
+        </Line>
+        <Line tag="SYS">
+          No PC: rode <span className="text-primary">terminal_breach.exe --api 8080</span> na pasta do executável e confira se aparece “ouvindo em localhost:8080”.
+        </Line>
         <div className="mt-6">
           <Button variant="outline" onClick={onExit}>
             ← Menu
