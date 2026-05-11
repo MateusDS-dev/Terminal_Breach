@@ -29,7 +29,6 @@ O projeto foi estruturado em duas camadas, com comunicação real entre front-en
 - [Configuração de Ambiente](#configuração-de-ambiente)
 - [API HTTP](#api-http)
 - [Troubleshooting](#troubleshooting)
-- [Roadmap](#roadmap)
 
 ---
 
