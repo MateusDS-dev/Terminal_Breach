@@ -788,7 +788,8 @@ int http_server_run(int port)
         return 1;
     }
 
-    printf("[API] Terminal Breach API ouvindo em http://localhost:%d\n", port);
+    printf("[API] Terminal Breach API ouvindo na porta %d (todas as interfaces; ex.: http://127.0.0.1:%d ou o IP da LAN)\n",
+           port, port);
     printf("[API] Endpoints: GET /health, POST /api/game/{start,guess}, POST /api/session/save,\n");
     printf("[API]           POST /api/room/{create,join,guess}, GET /api/room/state?roomId=...\n");
 

@@ -160,5 +160,14 @@
     "tentativas": 7,
     "rating": "Analista",
     "venceu": true
+  },
+  {
+    "timestamp": "2026-05-11 13:23:36",
+    "jogador": "trinity",
+    "dificuldade": "Script Kiddie",
+    "segredo": 63,
+    "tentativas": 9,
+    "rating": "Script Kiddie",
+    "venceu": true
   }
 ]

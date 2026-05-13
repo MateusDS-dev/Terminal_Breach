@@ -190,7 +190,7 @@ export function MultiplayerSession({ player, onExit }: Props) {
           <span className="text-primary">/health</span> nesse host no navegador (se falhar, a API não está escutando ou a porta não é 8080).
         </Line>
         <Line tag="SYS">
-          No PC: rode <span className="text-primary">terminal_breach.exe --api 8080</span> na pasta do executável e confira se aparece “ouvindo em localhost:8080”.
+          No PC: rode <span className="text-primary">terminal_breach.exe --api 8080</span> na pasta do executável e confira a mensagem de API ativa na porta 8080.
         </Line>
         <div className="mt-6">
           <Button variant="outline" onClick={onExit}>
