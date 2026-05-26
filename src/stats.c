@@ -7,10 +7,6 @@
 #include <string.h>
 #include <math.h>
 
-/* ------------------------------------------------------------------ */
-/*  Funções recursivas de estatística (sem laços — exigência do PIF)   */
-/* ------------------------------------------------------------------ */
-
 static float soma_rec(sessao_t *s, int n)
 {
     if (n <= 0) return 0.0f;
@@ -36,10 +32,6 @@ float variancia_rec(sessao_t *s, int n, float media)
     return soma_desvios_rec(s, n, media) / (float)n;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Buscas recursivas de melhor / pior sessão                           */
-/* ------------------------------------------------------------------ */
-
 static int idx_melhor_rec(sessao_t *s, int n, int melhor)
 {
     if (n <= 0) return melhor;
@@ -64,16 +56,11 @@ static int contar_vitorias_rec(sessao_t *s, int n)
     return s[n - 1].venceu + contar_vitorias_rec(s, n - 1);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Histograma ASCII de frequência de tentativas                        */
-/*  (Screen 4 do protótipo — "Frequência de Tentativas")               */
-/* ------------------------------------------------------------------ */
-#define MAX_TENT_HIST 15   /* exibe de 1 a MAX_TENT_HIST tentativas    */
-#define BARRA_MAX     30   /* largura máxima da barra em caracteres    */
+#define MAX_TENT_HIST 15
+#define BARRA_MAX     30
 
 static void exibir_histograma(sessao_t *lista, int total)
 {
-    /* Conta frequência de cada quantidade de tentativas */
     int freq[MAX_TENT_HIST + 1];
     memset(freq, 0, sizeof(freq));
     int maior_freq = 1;
@@ -101,9 +88,6 @@ static void exibir_histograma(sessao_t *lista, int total)
     printf("  %s\n", "-----------------------------------------------");
 }
 
-/* ------------------------------------------------------------------ */
-/*  stats_exibir_relatorio  (Screen 5 — "Relatório de Auditoria")      */
-/* ------------------------------------------------------------------ */
 void stats_exibir_relatorio(void)
 {
     int total = 0;
@@ -121,7 +105,6 @@ void stats_exibir_relatorio(void)
         return;
     }
 
-    /* --- Cálculos com funções recursivas --- */
     float med      = media_rec(lista, total);
     float var      = variancia_rec(lista, total, med);
     float desvio   = sqrtf(var);
@@ -131,7 +114,6 @@ void stats_exibir_relatorio(void)
     int idx_melhor = idx_melhor_rec(lista, total, -1);
     int idx_pior   = idx_pior_rec(lista, total, -1);
 
-    /* --- Painel de resumo --- */
     printf("  Audit_log.txt        : %s\n", ARQUIVO_JSON);
     printf("  Sessoes registradas  : %d\n", total);
     printf("  Vitorias             : %d  (%.1f%%)\n", vitorias, taxa);
@@ -140,14 +122,12 @@ void stats_exibir_relatorio(void)
            med, desvio);
     printf("\n");
 
-    /* --- Barra visual da taxa de vitória --- */
     printf("  Taxa de sucesso  [");
     int barras_v = (int)(taxa / 100.0f * 30.0f);
     for (int i = 0; i < 30; i++)
         printf(i < barras_v ? "#" : "-");
     printf("] %.1f%%\n\n", taxa);
 
-    /* --- Melhor sessão --- */
     if (idx_melhor >= 0) {
         sessao_t *m = &lista[idx_melhor];
         printf("  [MELHOR SESSAO]\n");
@@ -158,7 +138,6 @@ void stats_exibir_relatorio(void)
         printf("  [MELHOR SESSAO] Nenhuma vitoria ainda.\n\n");
     }
 
-    /* --- Pior sessão --- */
     if (idx_pior >= 0) {
         sessao_t *p = &lista[idx_pior];
         printf("  [PIOR SESSAO]\n");
@@ -169,10 +148,8 @@ void stats_exibir_relatorio(void)
         printf("  [PIOR SESSAO] Nenhuma derrota registrada.\n\n");
     }
 
-    /* --- Histograma de frequência de tentativas --- */
     exibir_histograma(lista, total);
 
-    /* --- Sugestão de estratégia --- */
     printf("\n  [ESTRATEGIA]\n");
     if (med > 7.0f) {
         printf("  Bias detectado: voce usa muitas tentativas.\n");

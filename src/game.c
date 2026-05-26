@@ -43,12 +43,8 @@ const char *calcular_rating(int tentativas_usadas, int venceu)
     return "Script Kiddie";
 }
 
-/* ------------------------------------------------------------------ */
-/*  Loop principal do jogo                                              */
-/* ------------------------------------------------------------------ */
 void jogo_executar(sessao_t *s, const char *nome_jogador)
 {
-    /* -- Seleção de dificuldade ------------------------------------ */
     printf("\n");
     printf("  +------------------------------------------+\n");
     printf("  |      SELECIONE O NIVEL DE FIREWALL       |\n");
@@ -71,11 +67,9 @@ void jogo_executar(sessao_t *s, const char *nome_jogador)
     dificuldade_t diff    = (dificuldade_t)escolha;
     int           max_tent = dificuldade_max_tentativas(diff);
 
-    /* -- Gera o numero secreto ------------------------------------ */
     srand((unsigned int)time(NULL));
     int segredo = (rand() % 100) + 1;
 
-    /* -- Inicializa sessao ---------------------------------------- */
     memset(s, 0, sizeof(*s));
     strncpy(s->jogador,     nome_jogador,           sizeof(s->jogador) - 1);
     strncpy(s->dificuldade, dificuldade_rotulo(diff),sizeof(s->dificuldade) - 1);
@@ -84,7 +78,6 @@ void jogo_executar(sessao_t *s, const char *nome_jogador)
     s->venceu     = 0;
     sessao_definir_timestamp(s);
 
-    /* -- Cabecalho da sessao -------------------------------------- */
     printf("\n");
     printf("  [SISTEMA] Firewall ativo. Nivel: %s\n", s->dificuldade);
     if (max_tent > 0)
@@ -93,7 +86,6 @@ void jogo_executar(sessao_t *s, const char *nome_jogador)
         printf("  [SISTEMA] Tentativas disponiveis: ilimitadas\n");
     printf("  [SISTEMA] Adivinhe o codigo de acesso (1 a 100).\n\n");
 
-    /* -- Loop de tentativas -------------------------------------- */
     int tentativa_atual = 0;
     int ganhou = 0;
 
@@ -125,7 +117,6 @@ void jogo_executar(sessao_t *s, const char *nome_jogador)
         }
     }
 
-    /* -- Resultado ----------------------------------------------- */
     s->tentativas = tentativa_atual;
     s->venceu     = ganhou;
     strncpy(s->rating, calcular_rating(tentativa_atual, ganhou), sizeof(s->rating) - 1);

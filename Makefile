@@ -11,15 +11,11 @@ ifeq ($(OS),Windows_NT)
 LDFLAGS += -lws2_32
 endif
 
-# Nome do executável (no Windows recebe .exe automaticamente pelo gcc)
 TARGET  = terminal_breach
 
-# Fontes e objetos
 SRCS    = src/main.c src/game.c src/db.c src/stats.c src/ghost_mode.c src/leaderboard.c src/http_server.c
 OBJS    = $(SRCS:.c=.o)
 
-# Diretório de dados (criado em tempo de execução pelo db.c se necessário,
-# mas garantimos sua existência aqui também)
 DATADIR = data
 
 # -----------------------------------------------------------------------
@@ -49,7 +45,6 @@ clean:
 	rm -f $(OBJS) $(TARGET) $(TARGET).exe
 	@echo "  [OK] Arquivos temporarios removidos."
 
-# Limpa o banco de dados
 clean-data:
 	rm -f $(DATADIR)/sessions.json
 	@echo "  [OK] Banco de dados removido."

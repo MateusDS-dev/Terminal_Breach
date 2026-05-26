@@ -26,9 +26,6 @@ static void aguardar_enter(void)
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-/* ================================================================== */
-/*  TELA INICIAL — sem Unicode                                          */
-/* ================================================================== */
 static void tela_inicial(char *nome_jogador, int tam)
 {
     limpar_tela();
@@ -67,9 +64,6 @@ static void tela_inicial(char *nome_jogador, int tam)
     aguardar_enter();
 }
 
-/* ================================================================== */
-/*  MENU PRINCIPAL                                                      */
-/* ================================================================== */
 static void exibir_menu(const char *nome)
 {
     limpar_tela();
@@ -90,12 +84,8 @@ static void exibir_menu(const char *nome)
     fflush(stdout);
 }
 
-/* ================================================================== */
-/*  main                                                                */
-/* ================================================================== */
 int main(int argc, char *argv[])
 {
-    /* Modo API HTTP */
     if (argc >= 2 && strcmp(argv[1], "--api") == 0) {
         int port = 8080;
         if (argc >= 3) {
@@ -105,7 +95,6 @@ int main(int argc, char *argv[])
         return http_server_run(port);
     }
 
-    /* Modo Ghost */
     if (argc >= 2 && strcmp(argv[1], "--ghost") == 0) {
         limpar_tela();
         ghost_executar();

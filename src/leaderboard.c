@@ -85,7 +85,6 @@ void leaderboard_exibir(void)
 
     int exibir = n_jogadores < TOP_N ? n_jogadores : TOP_N;
 
-    /* --- Tabela ASCII (sem Unicode) --- */
     printf("  +========+==================+========+=============+\n");
     printf("  |     TOP HACKERS -- PLACAR DE LIDERES             |\n");
     printf("  +======+==================+========+=============+\n");

@@ -126,10 +126,6 @@ static api_session_t *find_session(const char *session_id)
     return NULL;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Multiplayer (salas) + persistencia web em data/sessions.json       */
-/* ------------------------------------------------------------------ */
-
 #define MAX_MP_ROOMS 24
 #define ROOM_CODE_LEN 8
 
@@ -249,7 +245,6 @@ static void mp_save_result_sessions(mp_room_t *room)
         return;
     }
 
-    /* Empate / esgotou tentativas da sala */
     memset(&s, 0, sizeof(s));
     strncpy(s.jogador, room->host, sizeof(s.jogador) - 1);
     strncpy(s.dificuldade, label, sizeof(s.dificuldade) - 1);
@@ -700,7 +695,6 @@ static void handle_request(socket_t client, const char *request)
         return;
     }
 
-    /* GET em / ou rota desconhecida: 404 (evita 405 ao abrir http://IP:8080/ no navegador) */
     if (strcmp(method, "GET") == 0) {
         if (strcmp(path, "/") == 0) {
             send_json(

@@ -5,11 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* ------------------------------------------------------------------ */
-/*  Funções auxiliares de parsing JSON manual                           */
-/* ------------------------------------------------------------------ */
-
-/* Extrai o valor de uma chave string: "chave": "valor" */
 static int extrair_string(const char *linha, const char *chave,
                            char *saida, int tam)
 {
@@ -34,7 +29,6 @@ static int extrair_string(const char *linha, const char *chave,
     return 0;
 }
 
-/* Extrai o valor de uma chave inteira: "chave": 42 */
 static int extrair_int(const char *linha, const char *chave, int *saida)
 {
     char padrao[128];
@@ -54,7 +48,6 @@ static int extrair_int(const char *linha, const char *chave, int *saida)
     return 0;
 }
 
-/* Extrai o valor booleano: "chave": true/false */
 static int extrair_bool(const char *linha, const char *chave, int *saida)
 {
     char padrao[128];
@@ -72,9 +65,6 @@ static int extrair_bool(const char *linha, const char *chave, int *saida)
     return 0;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Escreve um objeto sessão em formato JSON num FILE* já aberto         */
-/* ------------------------------------------------------------------ */
 static void escrever_objeto(FILE *f, const sessao_t *s)
 {
     fprintf(f, "  {\n");
@@ -88,11 +78,6 @@ static void escrever_objeto(FILE *f, const sessao_t *s)
     fprintf(f, "  }");
 }
 
-/* ------------------------------------------------------------------ */
-/*  db_salvar_sessao                                                    */
-/*  Estratégia: carrega todas as sessões existentes e reescreve o       */
-/*  arquivo inteiro acrescido da nova sessão. Evita ftruncate/_chsize.  */
-/* ------------------------------------------------------------------ */
 void db_salvar_sessao(const sessao_t *nova)
 {
     /* Garante que o diretório data/ existe */
@@ -102,11 +87,9 @@ void db_salvar_sessao(const sessao_t *nova)
     system("mkdir -p data");
 #endif
 
-    /* Carrega sessões existentes */
     int total_existentes = 0;
     sessao_t *lista = db_carregar_todas(&total_existentes);
 
-    /* Abre o arquivo para reescrita completa */
     FILE *f = fopen(ARQUIVO_JSON, "w");
     if (!f) {
         fprintf(stderr, "[ERRO] Nao foi possivel abrir %s para escrita.\n",
@@ -117,13 +100,11 @@ void db_salvar_sessao(const sessao_t *nova)
 
     fprintf(f, "[\n");
 
-    /* Reescreve sessões anteriores */
     for (int i = 0; i < total_existentes; i++) {
         escrever_objeto(f, &lista[i]);
         fprintf(f, ",\n");
     }
 
-    /* Acrescenta nova sessão */
     escrever_objeto(f, nova);
     fprintf(f, "\n]\n");
 
@@ -131,9 +112,6 @@ void db_salvar_sessao(const sessao_t *nova)
     if (lista) free(lista);
 }
 
-/* ------------------------------------------------------------------ */
-/*  db_carregar_todas                                                   */
-/* ------------------------------------------------------------------ */
 sessao_t *db_carregar_todas(int *quantidade)
 {
     *quantidade = 0;
@@ -155,7 +133,6 @@ sessao_t *db_carregar_todas(int *quantidade)
     conteudo[lidos] = '\0';
     fclose(f);
 
-    /* Conta e aloca objetos */
     int capacidade = 64;
     sessao_t *lista = (sessao_t *)malloc((size_t)capacidade * sizeof(sessao_t));
     if (!lista) { free(conteudo); return NULL; }
@@ -164,20 +141,17 @@ sessao_t *db_carregar_todas(int *quantidade)
     char *p   = conteudo;
 
     while ((p = strchr(p, '{')) != NULL) {
-        p++; /* pula '{' */
+        p++;
 
-        /* Localiza o final do objeto atual */
         char *fim = strchr(p, '}');
         if (!fim) break;
 
-        /* Copia o bloco do objeto para buffer temporário */
         size_t bloco_tam = (size_t)(fim - p);
         char *bloco = (char *)malloc(bloco_tam + 1);
         if (!bloco) break;
         memcpy(bloco, p, bloco_tam);
         bloco[bloco_tam] = '\0';
 
-        /* Expande lista se necessário */
         if (total >= capacidade) {
             capacidade *= 2;
             sessao_t *tmp = (sessao_t *)realloc(lista,
@@ -189,7 +163,6 @@ sessao_t *db_carregar_todas(int *quantidade)
         sessao_t *s = &lista[total];
         memset(s, 0, sizeof(*s));
 
-        /* Extrai campos linha por linha */
         char *linha = strtok(bloco, "\n");
         while (linha) {
             extrair_string(linha, "timestamp",   s->timestamp,   sizeof(s->timestamp));

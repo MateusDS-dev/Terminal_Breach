@@ -12,12 +12,9 @@
 #  define ESPERAR_MS(ms) Sleep(ms)
 #else
 #  include <unistd.h>
-#  define ESPERAR_MS(ms) usleep((ms) * 1000)
+#define ESPERAR_MS(ms) usleep((ms) * 1000)
 #endif
 
-/* ------------------------------------------------------------------ */
-/*  Busca binaria recursiva com narracao                                */
-/* ------------------------------------------------------------------ */
 int ghost_resolver(int segredo, int baixo, int alto, int passo)
 {
     if (baixo > alto) return passo;
@@ -34,9 +31,6 @@ int ghost_resolver(int segredo, int baixo, int alto, int passo)
     else                       return ghost_resolver(segredo, baixo,    meio - 1, passo + 1);
 }
 
-/* ------------------------------------------------------------------ */
-/*  ghost_executar                                                      */
-/* ------------------------------------------------------------------ */
 void ghost_executar(void)
 {
     srand((unsigned int)time(NULL));
@@ -66,7 +60,6 @@ void ghost_executar(void)
     printf("  |  Eficiencia        : %s\n", eficiencia);
     printf("  +==================================================+\n\n");
 
-    /* Salva a sessao no JSON */
     sessao_t s;
     memset(&s, 0, sizeof(s));
     strncpy(s.jogador,     "GHOST_BOT", sizeof(s.jogador) - 1);
