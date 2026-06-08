@@ -15,21 +15,24 @@
 * [🎮 Sobre o Projeto](#-sobre-o-projeto)
 * [🏗️ Arquitetura do Sistema](#️-arquitetura-do-sistema)
 * [⚙️ Funcionalidades](#️-funcionalidades)
+* [🆕 Histórias Implementadas](#-histórias-implementadas-na-entrega-04)
 * [🗂️ Estrutura do Projeto](#️-estrutura-do-projeto)
 * [🚀 Como Executar](#-como-executar)
-* [🗓️ Sprint da Entrega 03](#️-sprint-da-entrega-03)
+* [🗓️ Sprint da Entrega 04](#️-sprint-da-entrega-04)
 * [🔄 Controle de Versionamento](#-controle-de-versionamento)
 * [👥 Equipe](#-equipe)
 * [📌 Backlog](#-backlog--histórias-de-usuário-detalhado)
 * [📸 Board](#-board-do-projeto)
 * [🐞 Issues](#-issue--bug-tracker)
 * [🌐 API HTTP](#-api-http)
-* [🧪 Testes](#-testes-de-sistema)
+* [🧪 Testes de Sistema](#-testes-de-sistema)
 * [🧪 Testes de Integração](#-testes-de-integração)
 * [👥 Programação em Par](#-programação-em-par)
 * [📱 Protótipo](#-protótipo-lo-fi-figma)
 * [📝 Storyboards](#-sketches-e-storyboards)
-* [🎥 Screencast](#-screencast-da-entrega-03)
+* [🎥 Screencast](#-screencast-da-entrega-04)
+* [🤝 Como Contribuir](#-como-contribuir)
+* [🔗 Links Importantes](#-links-importantes)
 * [🛠️ Troubleshooting](#️-troubleshooting)
 * [📚 Observações Acadêmicas](#-observações-acadêmicas)
 
@@ -39,27 +42,29 @@
 
 **Terminal Breach** é um jogo educativo desenvolvido como projeto acadêmico na CESAR School.
 
-O jogador assume o papel de um hacker tentando descobrir o código de acesso de um servidor protegido por firewall. A cada tentativa, o sistema fornece feedback temático (scanning, intrusão, recuo), criando uma experiência imersiva.
+O jogador assume o papel de um hacker tentando descobrir o código de acesso de um servidor protegido por firewall. A cada tentativa, o sistema fornece feedback temático, criando uma experiência imersiva e interativa.
 
-O projeto foi estruturado em duas camadas:
+O projeto foi estruturado em duas camadas principais:
 
-* **Back-end em C**: lógica do jogo, estatísticas e API HTTP.
-* **Front-end em React + TSX**: interface web moderna e experiência visual.
+* **Back-end em C** responsável pela lógica principal do jogo, estatísticas, persistência e API HTTP.
+* **Front-end em React + TSX** responsável pela interface web moderna, HUD, menus e integração online.
 
-Ao final da sessão, o jogo gera um relatório contendo:
+Ao final de cada sessão o sistema gera:
 
 * 📊 Estatísticas de desempenho
 * 🧠 Sugestões de estratégia
-* 🏆 Rating personalizado
+* 🏆 Rating do jogador
+* 📈 Histórico e ranking
 
-O projeto aborda:
+O projeto aborda conceitos como:
 
 * programação imperativa
 * recursão
 * manipulação de arquivos
+* integração HTTP
 * análise estatística
-* comunicação HTTP
-* integração front-end/back-end
+* arquitetura cliente-servidor
+* multiplayer online
 
 ---
 
@@ -71,7 +76,8 @@ O sistema foi dividido em duas camadas principais.
 
 Responsável por:
 
-* lógica principal do jogo
+* lógica principal
+* sistema de tentativas
 * geração do número secreto
 * estatísticas
 * API HTTP
@@ -89,7 +95,9 @@ Responsável por:
 * fluxo das partidas
 * multiplayer online
 
-## 🔄 Fluxo de Comunicação
+---
+
+# 🔄 Fluxo de Comunicação
 
 ```text
 Frontend (React/TSX) --> API HTTP (C) --> Lógica do jogo
@@ -130,27 +138,39 @@ Fluxo principal:
 
 ---
 
+# 🆕 Histórias Implementadas na Entrega 04
+
+Nesta entrega foram implementadas e refinadas novas histórias de usuário.
+
+## ✅ Histórias concluídas
+
+* [x] Sistema multiplayer PvP
+* [x] Persistência de sessões em JSON
+* [x] Sistema de leaderboard
+* [x] Integração completa Front ↔ API
+* [x] Sistema de fallback offline
+* [x] Modo Fantasma
+* [x] Sistema de estatísticas avançadas
+* [x] Relatório de desempenho do jogador
+
+---
+
 # 🗂️ Estrutura do Projeto
 
 ```text
 Terminal_Breach/
-├── include/                    # Headers C
-├── src/                        # Implementações C
-├── data/                       # Dados das sessões
-├── web/                        # Front-end React + TSX
+├── include/
+├── src/
+├── data/
+├── web/
 │   ├── src/
 │   ├── package.json
 │   └── vite.config.ts
 ├── docs/
-│   ├── board.png
-│   ├── backlog.png
-│   ├── issues.png
-│   ├── teste1.png
-│   ├── teste2.png
-│   └── sprint.png
 ├── Makefile
 ├── compilar.bat
 ├── audit_log.txt
+├── CONTRIBUTING.md
 └── README.md
 ```
 
@@ -188,6 +208,8 @@ Windows:
 mingw32-make
 ```
 
+---
+
 ## Executar API HTTP
 
 Linux/macOS:
@@ -202,11 +224,15 @@ Windows:
 .\terminal_breach.exe --api 8080
 ```
 
+---
+
 ## Executar modo terminal
 
 ```bash
 ./terminal_breach
 ```
+
+---
 
 ## Executar modo fantasma
 
@@ -225,6 +251,8 @@ cd web
 npm install
 npm run dev
 ```
+
+---
 
 ## Build de produção
 
@@ -262,21 +290,24 @@ Recursos:
 
 ---
 
-# 🗓️ Sprint da Entrega 03
+# 🗓️ Sprint da Entrega 04
 
-A Sprint 01 foi criada utilizando GitHub Projects para gerenciamento das atividades.
+A Sprint da Entrega 04 foi organizada utilizando GitHub Projects.
 
-Durante a sprint foram organizadas:
+Durante a sprint foram acompanhados:
 
-* histórias prioritárias
-* responsáveis
-* bugs
-* validações
-* progresso das tarefas
+* desenvolvimento das novas histórias
+* testes de sistema
+* integração multiplayer
+* revisão de bugs
+* validações finais
+* organização do backlog
 
-## 📸 Sprint Board
+---
 
-![Sprint](docs/board.png)
+## 📸 Quadro da Sprint
+
+![Sprint](docs/sprint04.png)
 
 ---
 
@@ -284,27 +315,27 @@ Durante a sprint foram organizadas:
 
 O projeto utilizou Git e GitHub como ambiente de versionamento.
 
-Foram realizados commits frequentes durante a Sprint 01.
+Foram realizados commits frequentes durante toda a Sprint.
 
 ## 📌 Histórico de commits
 
-https://github.com/MateusDS-dev/Terminal_Breach/commits/main
+LINK_DOS_COMMITS_AQUI
 
 ---
 
 # 👥 Equipe
 
-| Papel           | Nome                         | Responsabilidades                             |
-| --------------- | ---------------------------- | --------------------------------------------- |
-| 👑 Líder        | Rafael Medeiros Machado Dias | Coordenação geral, integração e modo fantasma |
-| ⚙️ Back-end     | Cauã Henrique Melo Almeida   | RNG, API HTTP e logs                          |
-| 🎨 Front-end    | João Felipe Bonifácio Barros | React, HUD e interface                        |
-| 📊 Estatísticas | Luis Henrique Vilas Boas     | Recursão e métricas                           |
-| 🧪 QA/Testes    | Mateus Henrique Diniz Silva  | Ranking, integração e testes                  |
+| Papel | Nome | Responsabilidades |
+|---|---|---|
+| 👑 Líder | Rafael Medeiros Machado Dias | Coordenação geral, integração e modo fantasma |
+| ⚙️ Back-end | Cauã Henrique Melo Almeida | RNG, API HTTP e logs |
+| 🎨 Front-end | João Felipe Bonifácio Barros | React, HUD e interface |
+| 📊 Estatísticas | Luis Henrique Vilas Boas | Recursão e métricas |
+| 🧪 QA/Testes | Mateus Henrique Diniz Silva | Ranking, integração e testes |
 
 ---
 
-# 📌 Backlog — Histórias de Usuário (Detalhado)
+# 📌 Backlog — Histórias de Usuário
 
 As histórias seguem o padrão:
 
@@ -324,8 +355,6 @@ As histórias seguem o padrão:
 * Uso de `srand(time)`
 * Validação correta
 
-![diagram](docs/mermaid-diagram.png)
-
 ---
 
 ## TB-02 · Loop com dicas temáticas
@@ -335,8 +364,6 @@ As histórias seguem o padrão:
 * Feedback alto/baixo
 * Tentativas restantes
 * Encerramento correto
-
-![diagram](docs/mermaid-diagram9.png)
 
 ---
 
@@ -349,21 +376,23 @@ As histórias seguem o padrão:
 * Elite
 * Ghost
 
-![diagram](docs/mermaid-diagram5.png)
-
 ---
 
 # 🟡 Prioridade 2
 
 ## TB-06 · Sugestões de estratégia
 
-![diagram](docs/mermaid-diagram4.png)
+* análise de desempenho
+* feedback automático
+* melhoria de decisões
 
 ---
 
 ## TB-08 · Sistema de rating
 
-![diagram](docs/mermaid-diagram6.png)
+* cálculo de desempenho
+* classificação automática
+* histórico de jogadores
 
 ---
 
@@ -371,25 +400,29 @@ As histórias seguem o padrão:
 
 ## TB-03 · Registro em log
 
-![diagram](docs/mermaid-diagram1.png)
+* persistência de eventos
+* auditoria de sessões
 
 ---
 
 ## TB-04 · Média de desempenho
 
-![diagram](docs/mermaid-diagram2.png)
+* cálculo estatístico
+* análise de partidas
 
 ---
 
 ## TB-05 · Estatísticas com recursão
 
-![diagram](docs/mermaid-diagram3.png)
+* funções recursivas
+* análise de dados
 
 ---
 
 ## TB-09 · Leaderboard
 
-![diagram](docs/mermaid-diagram7.png)
+* ranking online
+* pontuação global
 
 ---
 
@@ -397,7 +430,9 @@ As histórias seguem o padrão:
 
 ## TB-10 · Modo Fantasma
 
-![diagram](docs/mermaid-diagram8.png)
+* gameplay avançada
+* dificuldade extrema
+* suporte multiplayer
 
 ---
 
@@ -447,16 +482,22 @@ Salva sessões em JSON.
 
 # 🧪 Testes de Sistema
 
-| Funcionalidade         | Resultado |
-| ---------------------- | --------- |
-| Geração aleatória      | ✅ OK      |
-| Sistema de dificuldade | ✅ OK      |
-| Leaderboard            | ✅ OK      |
-| Registro em log        | ✅ OK      |
-| Relatório estatístico  | ✅ OK      |
-| Modo Fantasma          | ✅ OK      |
+## ✅ Testes realizados
 
-## 📸 Evidências
+| Funcionalidade | Resultado |
+|---|---|
+| Multiplayer PvP | ✅ OK |
+| Integração Front/API | ✅ OK |
+| Sistema de ranking | ✅ OK |
+| Persistência JSON | ✅ OK |
+| Sistema de logs | ✅ OK |
+| Estatísticas | ✅ OK |
+| API HTTP | ✅ OK |
+| Modo Fantasma | ✅ OK |
+
+---
+
+## 📸 Evidências dos testes
 
 ![Teste](docs/teste1.png)
 
@@ -464,32 +505,43 @@ Salva sessões em JSON.
 
 ---
 
+# 🎥 Screencast dos Testes
+
+## 📺 Vídeo dos testes de sistema
+
+LINK_DO_VIDEO_DOS_TESTES_AQUI
+
+---
+
 # 🧪 Testes de Integração
 
-| Teste                   | Resultado |
-| ----------------------- | --------- |
-| Comunicação Front ↔ API | ✅ OK      |
-| Multiplayer             | ✅ OK      |
-| Persistência JSON       | ✅ OK      |
-| Endpoint `/health`      | ✅ OK      |
-| Fallback offline        | ✅ OK      |
+| Teste | Resultado |
+|---|---|
+| Comunicação Front ↔ API | ✅ OK |
+| Multiplayer | ✅ OK |
+| Persistência JSON | ✅ OK |
+| Endpoint `/health` | ✅ OK |
+| Fallback offline | ✅ OK |
 
 ---
 
 # 👥 Programação em Par
 
-| Integrantes     | Funcionalidades        |
-| --------------- | ---------------------- |
-| Rafael + Cauã   | API HTTP e logs        |
-| João + Luis     | Estatísticas           |
-| Mateus + Rafael | Ranking e testes       |
-| João + Mateus   | Front-end e integração |
+Durante o desenvolvimento da Entrega 04 foram realizadas sessões de programação em pares para revisão de lógica, testes e integração.
 
-Benefícios:
+| Integrantes | Funcionalidades |
+|---|---|
+| Rafael + Cauã | API HTTP e logs |
+| João + Luis | Estatísticas |
+| Mateus + Rafael | Ranking e testes |
+| João + Mateus | Front-end e integração |
 
-* revisão contínua
+Benefícios obtidos:
+
 * redução de bugs
+* validação contínua
 * compartilhamento de conhecimento
+* melhoria da arquitetura
 
 ---
 
@@ -497,7 +549,7 @@ Benefícios:
 
 ## 🔗 Link do protótipo
 
-COLOCAR_LINK_DO_FIGMA_AQUI
+LINK_DO_FIGMA_AQUI
 
 ---
 
@@ -505,59 +557,95 @@ COLOCAR_LINK_DO_FIGMA_AQUI
 
 ## 🎮 Tela Inicial
 
-![TB-01](docs/telainicial1.png)
+![Tela Inicial](docs/telainicial1.png)
 
 ---
 
 ## 🎮 Seleção de Dificuldade
 
-![TB-01](docs/tela2.png)
+![Dificuldade](docs/tela2.png)
 
 ---
 
 ## 🎮 Tela de Tentativa
 
-![TB-01](docs/tela3.png)
+![Tentativa](docs/tela3.png)
 
 ---
 
 ## 🎮 Feedback
 
-![TB-01](docs/tela4.png)
+![Feedback](docs/tela4.png)
 
 ---
 
 ## 🎮 Relatório
 
-![TB-01](docs/tela5.png)
+![Relatório](docs/tela5.png)
 
 ---
 
 ## 🎮 Leaderboard
 
-![TB-01](docs/tela6.png)
+![Leaderboard](docs/tela6.png)
 
 ---
 
 ## 🎮 Modo Fantasma
 
-![TB-01](docs/tela7.png)
+![Fantasma](docs/tela7.png)
 
 ---
 
-# 🎥 Screencast da Entrega 03
+# 🎥 Screencast da Entrega 04
 
-Demonstração:
+Demonstração da entrega contendo:
 
-* integração web
-* API HTTP
+* novas histórias
 * multiplayer
-* estatísticas
-* modo fantasma
+* integração HTTP
+* testes de sistema
+* leaderboard
+* persistência JSON
 
-## 📺 Link
+---
 
-https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
+## 📺 Link do vídeo principal
+
+LINK_DO_VIDEO_DA_ENTREGA_04_AQUI
+
+---
+
+# 🤝 Como Contribuir
+
+O projeto segue um fluxo simples de contribuição acadêmica.
+
+## Passos
+
+1. Fazer fork do projeto
+2. Criar uma branch:
+
+```bash
+git checkout -b minha-feature
+```
+
+3. Realizar commits descritivos
+4. Enviar alterações:
+
+```bash
+git push origin minha-feature
+```
+
+5. Abrir Pull Request
+
+---
+
+## 📋 Padrões adotados
+
+* código organizado
+* nomenclatura padronizada
+* comentários claros
+* commits descritivos
 
 ---
 
@@ -565,15 +653,19 @@ https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
 
 ## 💻 GitHub
 
-https://github.com/MateusDS-dev/Terminal_Breach
+LINK_DO_GITHUB_AQUI
+
+---
 
 ## 🎨 Figma
 
-COLOCAR_LINK_DO_FIGMA_AQUI
+LINK_DO_FIGMA_AQUI
+
+---
 
 ## 📺 Screencast
 
-https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
+LINK_DO_VIDEO_DA_ENTREGA_04_AQUI
 
 ---
 
@@ -583,9 +675,13 @@ https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
 
 Instalar MinGW/MSYS2 e adicionar ao PATH.
 
+---
+
 ## `make` não encontrado
 
 Usar `mingw32-make`.
+
+---
 
 ## Front-end não conecta
 
@@ -593,25 +689,21 @@ Usar `mingw32-make`.
 * validar `/health`
 * revisar `VITE_BACKEND_URL`
 
+---
+
 ## Porta ocupada
 
 ```bash
 --api 8090
 ```
 
+---
+
 ## Multiplayer não conecta
 
 * liberar firewall
 * validar IP local
 * confirmar `/health`
-
-## `localhost:8080` não funciona
-
-Utilizar:
-
-```text
-127.0.0.1:8080
-```
 
 ---
 
@@ -628,5 +720,6 @@ O projeto aplica:
 * persistência
 * análise estatística
 * arquitetura cliente-servidor
-
-A funcionalidade extra implementa busca binária recursiva para visualização prática do algoritmo.
+* desenvolvimento colaborativo
+* testes de integração
+* versionamento contínuo
