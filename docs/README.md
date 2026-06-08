@@ -56,6 +56,16 @@ Ao final de cada sessão o sistema gera:
 * 🏆 Rating do jogador
 * 📈 Histórico e ranking
 
+O projeto aborda conceitos como:
+
+* programação imperativa
+* recursão
+* manipulação de arquivos
+* integração HTTP
+* análise estatística
+* arquitetura cliente-servidor
+* multiplayer online
+
 ---
 
 # 🏗️ Arquitetura do Sistema
@@ -239,6 +249,42 @@ cd web
 npm install
 npm run dev
 ```
+
+---
+
+## Build de produção
+
+```bash
+npm run build
+```
+
+---
+
+# 🔄 Validação da Integração
+
+1. Inicie a API C com `--api`
+2. Inicie o front-end com `npm run dev`
+3. Abra o navegador
+4. Inicie uma partida
+5. Verifique integração entre HUD e API
+
+---
+
+# 🌐 Multiplayer Online
+
+O projeto suporta partidas via:
+
+* LAN
+* Wi-Fi
+* internet com túnel HTTPS
+
+Recursos:
+
+* criação de salas
+* código de entrada
+* turnos alternados
+* sincronização em tempo real
+* persistência de resultados
 
 ---
 
@@ -430,7 +476,7 @@ As histórias seguem o padrão:
 
 # 📸 Backlog Visual
 
-![Backlog](docs/backlog1.png.jpeg)
+![Backlog](docs/backlog.png)
 
 ---
 
