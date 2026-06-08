@@ -1,252 +1,711 @@
 # 🎮💻 Terminal Breach
 
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
-![Linguagem](https://img.shields.io/badge/C-Programming-blue)
-![Licença](https://img.shields.io/badge/license-MIT-green)
+![Backend](https://img.shields.io/badge/backend-C-blue)
+![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20TSX-61dafb)
+![Build](https://img.shields.io/badge/build-local-informational)
+![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
 
-> Jogo de adivinhação com narrativa hacker, análise estatística e aprendizado de algoritmos — desenvolvido em C puro para terminal.
+> Jogo de adivinhação com narrativa hacker, análise estatística, multiplayer e integração completa entre front-end web e back-end em C.
 
 ---
 
-## 🎮💻 Sobre o Projeto
+# 📚 Índice
+
+* [🎮 Sobre o Projeto](#-sobre-o-projeto)
+* [🏗️ Arquitetura do Sistema](#️-arquitetura-do-sistema)
+* [⚙️ Funcionalidades](#️-funcionalidades)
+* [🆕 Histórias Implementadas](#-histórias-implementadas-na-entrega-04)
+* [🗂️ Estrutura do Projeto](#️-estrutura-do-projeto)
+* [🚀 Como Executar](#-como-executar)
+* [🗓️ Sprint da Entrega 04](#️-sprint-da-entrega-04)
+* [🔄 Controle de Versionamento](#-controle-de-versionamento)
+* [👥 Equipe](#-equipe)
+* [📌 Backlog](#-backlog--histórias-de-usuário-detalhado)
+* [📸 Board](#-board-do-projeto)
+* [🐞 Issues](#-issue--bug-tracker)
+* [🌐 API HTTP](#-api-http)
+* [🧪 Testes de Sistema](#-testes-de-sistema)
+* [🧪 Testes de Integração](#-testes-de-integração)
+* [👥 Programação em Par](#-programação-em-par)
+* [📱 Protótipo](#-protótipo-lo-fi-figma)
+* [📝 Storyboards](#-sketches-e-storyboards)
+* [🎥 Screencast](#-screencast-da-entrega-04)
+* [🤝 Como Contribuir](#-como-contribuir)
+* [🔗 Links Importantes](#-links-importantes)
+* [🛠️ Troubleshooting](#️-troubleshooting)
+* [📚 Observações Acadêmicas](#-observações-acadêmicas)
+
+---
+
+# 🎮💻 Sobre o Projeto
 
 **Terminal Breach** é um jogo educativo desenvolvido como projeto acadêmico na CESAR School.
 
-O jogador assume o papel de um hacker tentando descobrir o código de acesso de um servidor protegido por firewall. A cada tentativa, o sistema fornece feedback temático (scanning, intrusão, recuo), criando uma experiência imersiva.
+O jogador assume o papel de um hacker tentando descobrir o código de acesso de um servidor protegido por firewall. A cada tentativa, o sistema fornece feedback temático, criando uma experiência imersiva e interativa.
 
-Ao final da sessão, o jogo gera um **relatório de auditoria completo**, contendo:
+O projeto foi estruturado em duas camadas principais:
+
+* **Back-end em C** responsável pela lógica principal do jogo, estatísticas, persistência e API HTTP.
+* **Front-end em React + TSX** responsável pela interface web moderna, HUD, menus e integração online.
+
+Ao final de cada sessão o sistema gera:
 
 * 📊 Estatísticas de desempenho
 * 🧠 Sugestões de estratégia
-* 🏆 Rating personalizado
-
-O projeto aborda conceitos fundamentais da linguagem C, como:
-
-* geração de números aleatórios (`srand(time)`)
-* recursão
-* manipulação de arquivos
-* estruturas de controle
-* lógica algorítmica
+* 🏆 Rating do jogador
+* 📈 Histórico e ranking
 
 ---
 
-## ⚙️ Funcionalidades
+# 🏗️ Arquitetura do Sistema
 
-* 🎲 Geração de número aleatório por sessão com seed por timestamp
-* 🔁 Loop de tentativas com dicas narrativas temáticas
-* 🎯 Quatro níveis de dificuldade (Script Kiddie, Hacker, Elite, Ghost)
+## 🔹 Back-end em C
+
+Responsável por:
+
+* lógica principal
+* sistema de tentativas
+* geração do número secreto
+* estatísticas
+* API HTTP
+* persistência de sessões
+* multiplayer
+
+---
+
+## 🔹 Front-end em React + TSX
+
+Responsável por:
+
+* interface visual
+* HUD do jogador
+* menus
+* histórico
+* fluxo das partidas
+* multiplayer online
+
+---
+
+# 🔄 Fluxo de Comunicação
+
+```text
+Frontend (React/TSX) --> API HTTP (C) --> Lógica do jogo
+         |                     |
+         |                     --> Sessões e persistência
+         |
+         --> Interface, HUD, histórico e score
+```
+
+Fluxo principal:
+
+1. Front verifica `GET /health`
+2. Sessão criada via `POST /api/game/start`
+3. Tentativas via `POST /api/game/guess`
+4. Sessão salva via `POST /api/session/save`
+
+---
+
+# ⚙️ Funcionalidades
+
+* 🎲 Geração de número aleatório por sessão
+* 🔁 Sistema de tentativas com feedback temático
+* 🎯 Quatro níveis de dificuldade
 * 📝 Registro automático em `audit_log.txt`
-* 📊 Relatório com média, desvio padrão, melhor e pior sessão
-* 🧠 Estatísticas implementadas com recursão
-* 💡 Sugestões de estratégia baseadas no padrão do jogador
-* 🏆 Sistema de rating por sessão
-* 📈 Leaderboard dos melhores jogadores
-* 👻 Modo Fantasma (busca binária automática)
+* 📊 Relatório estatístico
+* 🧠 Estatísticas com recursão
+* 💡 Sugestões de estratégia
+* 🏆 Sistema de rating
+* 📈 Leaderboard
+* 👻 Modo Fantasma
+* 🌐 API HTTP em C
+* ⚛️ Front-end em React + TypeScript
+* 🔄 Integração em tempo real
+* 🧩 Multiplayer PvP
+* 💾 Persistência em JSON
+* 📡 Suporte LAN e internet
+* 🛡️ Sistema fallback offline
 
 ---
 
-## 🗂️ Estrutura do Projeto
+# 🆕 Histórias Implementadas na Entrega 04
 
-```bash
-terminal-breach/
-├── src/
-│   ├── game.c          # loop principal e lógica da sessão
-│   ├── rng.c           # geração de número aleatório
-│   ├── logger.c        # manipulação do audit_log.txt
-│   ├── stats.c         # estatísticas com recursão
-│   ├── advisor.c       # sugestões de estratégia
-│   └── ranking.c       # leaderboard
+## ✅ Histórias concluídas
+
+* [x] Sistema multiplayer PvP
+* [x] Persistência de sessões em JSON
+* [x] Sistema de leaderboard
+* [x] Integração completa Front ↔ API
+* [x] Sistema de fallback offline
+* [x] Modo Fantasma
+* [x] Sistema de estatísticas avançadas
+* [x] Relatório de desempenho do jogador
+
+---
+
+# 🗂️ Estrutura do Projeto
+
+```text
+Terminal_Breach/
 ├── include/
+├── src/
+├── data/
+├── web/
+│   ├── src/
+│   ├── package.json
+│   └── vite.config.ts
 ├── docs/
-│   ├── board.png
-│   └── backlog.png
-├── audit_log.txt
 ├── Makefile
+├── compilar.bat
+├── audit_log.txt
+├── CONTRIBUTING.md
 └── README.md
 ```
 
 ---
 
-## 🚀 Como Executar
+# 🚀 Como Executar
 
-### 🔧 Pré-requisitos
+# 🔧 Pré-requisitos
 
-* GCC instalado (Linux, macOS ou WSL)
+## Back-end (C)
 
-### ▶️ Execução
+* GCC
+* GNU Make
+
+## Front-end (React + TSX)
+
+* Node.js 18+
+* npm
+
+---
+
+# ▶️ Executando o Back-end
+
+## Compilar
+
+Linux/macOS:
 
 ```bash
-# Clonar o repositório
-git clone https://github.com/seu-usuario/terminal-breach.git
-
-# Entrar na pasta
-cd terminal-breach
-
-# Compilar
 make
+```
 
-# Executar
+Windows:
+
+```powershell
+mingw32-make
+```
+
+---
+
+## Executar API HTTP
+
+Linux/macOS:
+
+```bash
+./terminal_breach --api 8080
+```
+
+Windows:
+
+```powershell
+.\terminal_breach.exe --api 8080
+```
+
+---
+
+## Executar modo terminal
+
+```bash
 ./terminal_breach
+```
 
-# Executar modo fantasma
+---
+
+## Executar modo fantasma
+
+```bash
 ./terminal_breach --ghost
 ```
 
 ---
 
-## 👥 Equipe
+# ⚛️ Executando o Front-end
 
-| Papel           | Nome                         | Responsabilidades                                                                   |
-| --------------- | ---------------------------- | ----------------------------------------------------------------------------------- |
-| 👑 Líder        | Rafael Medeiros Machado Dias | Coordenação geral, integração dos módulos, Modo Fantasma (busca_binaria_rec), TB-10 |
-| ⚙️ Back-end     | Cauã Henrique Melo Almeida   | RNG (`rng.c`), logs (`logger.c`), TB-01, TB-03                                      |
-| 🎨 Front-end    | João Felipe Bonifácio Barros | Loop principal (`game.c`), níveis e rating, TB-02, TB-07, TB-08                     |
-| 📊 Estatísticas | Luis Henrique Vilas Boas     | Recursão e análise (`stats.c`, `advisor.c`), TB-04, TB-05, TB-06                    |
-| 🧪 QA/Testes    | Mateus Henrique Diniz Silva  | Ranking (`ranking.c`), testes e validações, TB-09                                   |
+Dentro da pasta `web`:
 
----
-
-## 📌 Backlog — Histórias de Usuário (Detalhado)
-
-As histórias seguem o padrão **3Cs (Cartão, Conversa, Confirmação)**.
+```bash
+cd web
+npm install
+npm run dev
+```
 
 ---
 
-### 🔴 Prioridade 1 — MVP
+# 🗓️ Sprint da Entrega 04
 
-### TB-01 · Geração de número aleatório
+A Sprint da Entrega 04 foi organizada utilizando GitHub Projects.
 
-> Como jogador, quero que o jogo gere um número secreto diferente a cada sessão, para que a experiência seja imprevisível.
+Durante a sprint foram acompanhados:
 
-**Critérios:**
-
-* Número entre 1 e 100 usando `srand(time)`
-* Não repete na mesma execução
-* Validado em múltiplas execuções
-
----
-
-### TB-02 · Loop com dicas temáticas
-
-> Como jogador, quero receber feedback imersivo ao errar tentativas.
-
-**Critérios:**
-
-* Mensagens para alto/baixo
-* Mostra tentativas restantes
-* Encerra corretamente
+* desenvolvimento das novas histórias
+* testes de sistema
+* integração multiplayer
+* revisão de bugs
+* validações finais
+* organização do backlog
 
 ---
 
-### TB-03 · Registro em log
+## 📸 Quadro da Sprint
 
-> Como jogador, quero histórico das partidas.
-
-**Critérios:**
-
-* Cria `audit_log.txt`
-* Salva dados completos
-* Usa modo append
+![Sprint](docs/sprint04.png)
 
 ---
 
-### TB-04 · Média de desempenho
+# 🔄 Controle de Versionamento
 
-> Como jogador, quero entender minha performance.
+O projeto utilizou Git e GitHub como ambiente de versionamento.
 
-**Critérios:**
+Foram realizados commits frequentes durante toda a Sprint.
 
-* Lê o arquivo
-* Calcula média correta
-* Exibe no relatório
+## 📌 Histórico de commits
 
----
-
-### TB-05 · Estatísticas com recursão
-
-> Como estudante, quero aplicar recursão em problemas reais.
-
-**Critérios:**
-
-* Funções recursivas implementadas
-* Resultado correto
-* Código comentado
+LINK_DOS_COMMITS_AQUI
 
 ---
 
-### TB-06 · Sugestões de estratégia
+# 👥 Equipe
 
-> Como jogador, quero melhorar minha eficiência.
-
-**Critérios:**
-
-* Detecta padrões
-* Sugere melhorias
-* Exibe no final
-
----
-
-### 🟡 Prioridade 2
-
-### TB-07 · Níveis de dificuldade
-
-* Script Kiddie, Hacker, Elite, Ghost
-* Configuração inicial
-* Registro no log
+| Papel | Nome | Responsabilidades |
+|---|---|---|
+| 👑 Líder | Rafael Medeiros Machado Dias | Coordenação geral, integração e modo fantasma |
+| ⚙️ Back-end | Cauã Henrique Melo Almeida | RNG, API HTTP e logs |
+| 🎨 Front-end | João Felipe Bonifácio Barros | React, HUD e interface |
+| 📊 Estatísticas | Luis Henrique Vilas Boas | Recursão e métricas |
+| 🧪 QA/Testes | Mateus Henrique Diniz Silva | Ranking, integração e testes |
 
 ---
 
-### TB-08 · Sistema de rating
+# 📌 Backlog — Histórias de Usuário (Detalhado)
 
-* Baseado em eficiência
-* Exibição temática
-* Salvo no log
+As histórias seguem o padrão:
 
----
-
-### 🟢 Prioridade 3
-
-### TB-09 · Leaderboard
-
-* Ordenação por desempenho
-* Top 5 jogadores
-* Exibição formatada
+* Cartão
+* Conversa
+* Confirmação
 
 ---
 
-### ⭐ Extra
+# 🔴 Prioridade 1 — MVP
 
-### TB-10 · Modo Fantasma
+## TB-01 · Geração de número aleatório
 
-* Busca binária recursiva
-* Execução automática
-* Explicação passo a passo
+### Critérios
+
+* Número entre 1 e 100
+* Uso de `srand(time)`
+* Validação correta
+
+![diagram](docs/mermaid-diagram.png)
 
 ---
 
-## 📸 Board do Projeto
+## TB-02 · Loop com dicas temáticas
+
+### Critérios
+
+* Feedback alto/baixo
+* Tentativas restantes
+* Encerramento correto
+
+![diagram](docs/mermaid-diagram9.png)
+
+---
+
+## TB-07 · Níveis de dificuldade
+
+### Critérios
+
+* Script Kiddie
+* Hacker
+* Elite
+* Ghost
+
+![diagram](docs/mermaid-diagram5.png)
+
+---
+
+# 🟡 Prioridade 2
+
+## TB-06 · Sugestões de estratégia
+
+### Critérios
+
+* análise de desempenho
+* feedback automático
+* melhoria de decisões
+
+![diagram](docs/mermaid-diagram4.png)
+
+---
+
+## TB-08 · Sistema de rating
+
+### Critérios
+
+* cálculo de desempenho
+* classificação automática
+* histórico de jogadores
+
+![diagram](docs/mermaid-diagram6.png)
+
+---
+
+# 🟢 Prioridade 3
+
+## TB-03 · Registro em log
+
+### Critérios
+
+* persistência de eventos
+* auditoria de sessões
+
+![diagram](docs/mermaid-diagram1.png)
+
+---
+
+## TB-04 · Média de desempenho
+
+### Critérios
+
+* cálculo estatístico
+* análise de partidas
+
+![diagram](docs/mermaid-diagram2.png)
+
+---
+
+## TB-05 · Estatísticas com recursão
+
+### Critérios
+
+* funções recursivas
+* análise de dados
+
+![diagram](docs/mermaid-diagram3.png)
+
+---
+
+## TB-09 · Leaderboard
+
+### Critérios
+
+* ranking online
+* pontuação global
+
+![diagram](docs/mermaid-diagram7.png)
+
+---
+
+# ⭐ Funcionalidade Extra
+
+## TB-10 · Modo Fantasma
+
+### Critérios
+
+* gameplay avançada
+* dificuldade extrema
+* suporte multiplayer
+
+![diagram](docs/mermaid-diagram8.png)
+
+---
+
+# 📸 Board do Projeto
 
 ![Board](docs/board.png)
 
 ---
 
-## 📸 Backlog Visual
+# 📸 Backlog Visual
 
-![Backlog](docs/backlog.png)
+![Backlog](docs/backlog1.png.jpeg)
 
 ---
 
-## 📚 Observações Acadêmicas
+# 🐞 Issue / Bug Tracker
+
+Gerenciamento realizado com GitHub Issues.
+
+## 📸 Issues do Projeto
+
+![Issues](docs/issues.png)
+
+---
+
+# 🌐 API HTTP
+
+## Endpoints principais
+
+### `GET /health`
+
+Verifica se a API está online.
+
+### `POST /api/game/start`
+
+Inicia uma sessão.
+
+### `POST /api/game/guess`
+
+Envia tentativa.
+
+### `POST /api/session/save`
+
+Salva sessões em JSON.
+
+---
+
+# 🧪 Testes de Sistema
+
+## ✅ Testes realizados
+
+| Funcionalidade | Resultado |
+|---|---|
+| Multiplayer PvP | ✅ OK |
+| Integração Front/API | ✅ OK |
+| Sistema de ranking | ✅ OK |
+| Persistência JSON | ✅ OK |
+| Sistema de logs | ✅ OK |
+| Estatísticas | ✅ OK |
+| API HTTP | ✅ OK |
+| Modo Fantasma | ✅ OK |
+
+---
+
+## 📸 Evidências dos testes
+
+![Teste](docs/teste1.png)
+
+![Teste](docs/teste2.png)
+
+---
+
+# 🎥 Screencast dos Testes
+
+## 📺 Vídeo dos testes de sistema
+
+LINK_DO_VIDEO_DOS_TESTES_AQUI
+
+---
+
+# 🧪 Testes de Integração
+
+| Teste | Resultado |
+|---|---|
+| Comunicação Front ↔ API | ✅ OK |
+| Multiplayer | ✅ OK |
+| Persistência JSON | ✅ OK |
+| Endpoint `/health` | ✅ OK |
+| Fallback offline | ✅ OK |
+
+---
+
+# 👥 Programação em Par
+
+Durante o desenvolvimento da Entrega 04 foram realizadas sessões de programação em pares para revisão de lógica, testes e integração.
+
+| Integrantes | Funcionalidades |
+|---|---|
+| Rafael + Cauã | API HTTP e logs |
+| João + Luis | Estatísticas |
+| Mateus + Rafael | Ranking e testes |
+| João + Mateus | Front-end e integração |
+
+Benefícios obtidos:
+
+* redução de bugs
+* validação contínua
+* compartilhamento de conhecimento
+* melhoria da arquitetura
+
+---
+
+# 📱 Protótipo Lo-Fi (Figma)
+
+## 🔗 Link do protótipo
+
+LINK_DO_FIGMA_AQUI
+
+---
+
+# 📝 Sketches e Storyboards
+
+## 🎮 Tela Inicial
+
+![Tela Inicial](docs/telainicial1.png)
+
+---
+
+## 🎮 Seleção de Dificuldade
+
+![Dificuldade](docs/tela2.png)
+
+---
+
+## 🎮 Tela de Tentativa
+
+![Tentativa](docs/tela3.png)
+
+---
+
+## 🎮 Feedback
+
+![Feedback](docs/tela4.png)
+
+---
+
+## 🎮 Relatório
+
+![Relatório](docs/tela5.png)
+
+---
+
+## 🎮 Leaderboard
+
+![Leaderboard](docs/tela6.png)
+
+---
+
+## 🎮 Modo Fantasma
+
+![Fantasma](docs/tela7.png)
+
+---
+
+# 🎥 Screencast da Entrega 04
+
+Demonstração da entrega contendo:
+
+* novas histórias
+* multiplayer
+* integração HTTP
+* testes de sistema
+* leaderboard
+* persistência JSON
+
+---
+
+## 📺 Link do vídeo principal
+
+LINK_DO_VIDEO_DA_ENTREGA_04_AQUI
+
+---
+
+# 🤝 Como Contribuir
+
+O projeto segue um fluxo simples de contribuição acadêmica.
+
+## Passos
+
+1. Fazer fork do projeto
+2. Criar uma branch:
+
+```bash
+git checkout -b minha-feature
+```
+
+3. Realizar commits descritivos
+4. Enviar alterações:
+
+```bash
+git push origin minha-feature
+```
+
+5. Abrir Pull Request
+
+---
+
+## 📋 Padrões adotados
+
+* código organizado
+* nomenclatura padronizada
+* comentários claros
+* commits descritivos
+
+---
+
+# 🔗 Links Importantes
+
+## 💻 GitHub
+
+LINK_DO_GITHUB_AQUI
+
+---
+
+## 🎨 Figma
+
+LINK_DO_FIGMA_AQUI
+
+---
+
+## 📺 Screencast
+
+LINK_DO_VIDEO_DA_ENTREGA_04_AQUI
+
+---
+
+# 🛠️ Troubleshooting
+
+## `gcc` não encontrado
+
+Instalar MinGW/MSYS2 e adicionar ao PATH.
+
+---
+
+## `make` não encontrado
+
+Usar `mingw32-make`.
+
+---
+
+## Front-end não conecta
+
+* verificar API
+* validar `/health`
+* revisar `VITE_BACKEND_URL`
+
+---
+
+## Porta ocupada
+
+```bash
+--api 8090
+```
+
+---
+
+## Multiplayer não conecta
+
+* liberar firewall
+* validar IP local
+* confirmar `/health`
+
+---
+
+# 📚 Observações Acadêmicas
 
 Projeto desenvolvido para a disciplina de Desenvolvimento de Software Prático — CESAR School.
 
-Abrange:
+O projeto aplica:
 
 * programação imperativa
 * recursão
-* manipulação de arquivos
+* integração HTTP
+* multiplayer
+* persistência
 * análise estatística
-
-A funcionalidade extra implementa **busca binária recursiva**, permitindo visualizar o algoritmo em execução.
-
----
+* arquitetura cliente-servidor
+* desenvolvimento colaborativo
+* testes de integração
+* versionamento contínuo
