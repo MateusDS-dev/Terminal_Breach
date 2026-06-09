@@ -1,12 +1,7 @@
-# -----------------------------------------------------------------------
-#  Terminal Breach — Makefile
-# -----------------------------------------------------------------------
-
 CC      = gcc
 CFLAGS  = -Wall -Wextra -std=c11 -Iinclude
 LDFLAGS = -lm
 
-# Winsock (API HTTP) — necessário no Windows com MinGW; ignorado em Linux/macOS
 ifeq ($(OS),Windows_NT)
 LDFLAGS += -lws2_32
 endif
@@ -18,9 +13,6 @@ OBJS    = $(SRCS:.c=.o)
 
 DATADIR = data
 
-# -----------------------------------------------------------------------
-#  Regra padrão
-# -----------------------------------------------------------------------
 all: $(DATADIR) $(TARGET)
 
 $(TARGET): $(OBJS)
@@ -34,13 +26,9 @@ $(TARGET): $(OBJS)
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-# Garante que o diretório data/ existe antes de compilar
 $(DATADIR):
 	mkdir -p $(DATADIR)
 
-# -----------------------------------------------------------------------
-#  Limpeza
-# -----------------------------------------------------------------------
 clean:
 	rm -f $(OBJS) $(TARGET) $(TARGET).exe
 	@echo "  [OK] Arquivos temporarios removidos."

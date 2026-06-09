@@ -6,7 +6,15 @@ terminal_breach
 
 # Arquivos de IDE e editor
 .vscode/
+.idea/
 *.user
+
+# Arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Arquivos de lock local desnecessários
+package-lock.json
 
 # Arquivos temporários do Windows
 Thumbs.db
