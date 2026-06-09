@@ -84,7 +84,7 @@ terminal-breach/
 
 ```bash
 # Clonar o repositório
- https://github.com/MateusDS-dev/Terminal_Breach.git
+git clone https://github.com/MateusDS-dev/Terminal_Breach.git
 
 # Entrar na pasta
 cd terminal_breach
