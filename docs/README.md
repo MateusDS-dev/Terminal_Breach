@@ -14,6 +14,10 @@ O projeto foi estruturado em duas camadas, com comunicação real entre front-en
 
 ---
 
+← [Voltar ao README principal](../README(inicial).md)
+
+---
+
 ## Sumário
 
 - [Destaques](#destaques)
