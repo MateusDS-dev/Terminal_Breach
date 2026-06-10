@@ -573,7 +573,7 @@ COLOCAR_LINK_DO_FIGMA_AQUI
 
 ## 📺 Screencast
 
-https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
+https://youtu.be/XPNKL4KcfU8?si=t-etO3ihPEAd2_y3
 
 ---
 
