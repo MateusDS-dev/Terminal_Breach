@@ -372,13 +372,7 @@ Salva sessões.
 | Logs              | ✅         |
 | Relatórios        | ✅         |
 
-## 📸 Evidências
 
-![Teste](docs/teste1.png)
-
-![Teste](docs/teste2.png)
-
----
 
 # 🧪 Testes de Integração
 
@@ -403,11 +397,7 @@ Salva sessões.
 
 # 📱 Protótipo Lo-Fi (Figma)
 
-## 🔗 Link do protótipo
 
-COLOCAR_LINK_DO_FIGMA_AQUI
-
----
 
 # 📝 Sketches e Storyboards
 
@@ -460,9 +450,7 @@ O vídeo também apresenta:
 
 [GitHub do Projeto](https://github.com/MateusDS-dev/Terminal_Breach)
 
-## 🎨 Figma
 
-COLOCAR_LINK_DO_FIGMA_AQUI
 
 ## 📺 Screencast Completo
 
