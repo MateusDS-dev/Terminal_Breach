@@ -456,11 +456,7 @@ Salva sessões em JSON.
 | Relatório estatístico  | ✅ OK      |
 | Modo Fantasma          | ✅ OK      |
 
-## 📸 Evidências
 
-![Teste](docs/teste1.png)
-
-![Teste](docs/teste2.png)
 
 ---
 
@@ -495,9 +491,6 @@ Benefícios:
 
 # 📱 Protótipo Lo-Fi (Figma)
 
-## 🔗 Link do protótipo
-
-COLOCAR_LINK_DO_FIGMA_AQUI
 
 ---
 
