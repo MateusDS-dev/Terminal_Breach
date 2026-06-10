@@ -417,9 +417,6 @@ As histórias seguem o padrão:
 
 Gerenciamento realizado com GitHub Issues.
 
-## 📸 Issues do Projeto
-
-![Issues](docs/issues.png)
 
 ---
 
@@ -562,7 +559,6 @@ https://github.com/MateusDS-dev/Terminal_Breach
 
 ## 🎨 Figma
 
-COLOCAR_LINK_DO_FIGMA_AQUI
 
 ## 📺 Screencast
 
