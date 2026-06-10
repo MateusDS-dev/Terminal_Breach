@@ -32,6 +32,13 @@
 * [🎥 Screencast](#-screencast-da-entrega-03)
 * [🛠️ Troubleshooting](#️-troubleshooting)
 * [📚 Observações Acadêmicas](#-observações-acadêmicas)
+* [📈 Roadmap Futuro](#-roadmap-futuro)
+* [🔐 Segurança](#-segurança)
+* [🧠 Conceitos Aplicados](#-conceitos-aplicados)
+* [📊 Métricas do Projeto](#-métricas-do-projeto)
+* [🗃️ Organização das Branches](#️-organização-das-branches)
+* [✅ Critérios Acadêmicos Atendidos](#-critérios-acadêmicos-atendidos)
+* [📄 Licença](#-licença)
 
 ---
 
@@ -134,20 +141,14 @@ Fluxo principal:
 
 ```text
 Terminal_Breach/
-├── include/                    # Headers C
-├── src/                        # Implementações C
-├── data/                       # Dados das sessões
-├── web/                        # Front-end React + TSX
+├── include/
+├── src/
+├── data/
+├── web/
 │   ├── src/
 │   ├── package.json
 │   └── vite.config.ts
 ├── docs/
-│   ├── board.png
-│   ├── backlog.png
-│   ├── issues.png
-│   ├── teste1.png
-│   ├── teste2.png
-│   └── sprint.png
 ├── Makefile
 ├── compilar.bat
 ├── audit_log.txt
@@ -288,41 +289,25 @@ Foram realizados commits frequentes durante a Sprint 01.
 
 ## 📌 Histórico de commits
 
-https://github.com/MateusDS-dev/Terminal_Breach/commits/main
+[Histórico de Commits](https://github.com/MateusDS-dev/Terminal_Breach/commits/main)
 
 ---
 
 # 👥 Equipe
 
-| Papel           | Nome                         | Responsabilidades                             |
-| --------------- | ---------------------------- | --------------------------------------------- |
-| 👑 Líder        | Rafael Medeiros Machado Dias | Coordenação geral, integração e modo fantasma |
-| ⚙️ Back-end     | Cauã Henrique Melo Almeida   | RNG, API HTTP e logs                          |
-| 🎨 Front-end    | João Felipe Bonifácio Barros | React, HUD e interface                        |
-| 📊 Estatísticas | Luis Henrique Vilas Boas     | Recursão e métricas                           |
-| 🧪 QA/Testes    | Mateus Henrique Diniz Silva  | Ranking, integração e testes                  |
+| Papel           | Nome                         | Responsabilidades |
+| --------------- | ---------------------------- | ----------------- |
+| 👑 Líder        | Rafael Medeiros Machado Dias | Coordenação geral |
+| ⚙️ Back-end     | Cauã Henrique Melo Almeida   | API HTTP          |
+| 🎨 Front-end    | João Felipe Bonifácio Barros | React             |
+| 📊 Estatísticas | Luis Henrique Vilas Boas     | Recursão          |
+| 🧪 QA/Testes    | Mateus Henrique Diniz Silva  | Testes            |
 
 ---
 
-# 📌 Backlog — Histórias de Usuário (Detalhado)
-
-As histórias seguem o padrão:
-
-* Cartão
-* Conversa
-* Confirmação
-
----
-
-# 🔴 Prioridade 1 — MVP
+# 📌 Backlog — Histórias de Usuário
 
 ## TB-01 · Geração de número aleatório
-
-### Critérios
-
-* Número entre 1 e 100
-* Uso de `srand(time)`
-* Validação correta
 
 ![diagram](docs/mermaid-diagram.png)
 
@@ -330,74 +315,13 @@ As histórias seguem o padrão:
 
 ## TB-02 · Loop com dicas temáticas
 
-### Critérios
-
-* Feedback alto/baixo
-* Tentativas restantes
-* Encerramento correto
-
 ![diagram](docs/mermaid-diagram9.png)
 
 ---
 
 ## TB-07 · Níveis de dificuldade
 
-### Critérios
-
-* Script Kiddie
-* Hacker
-* Elite
-* Ghost
-
 ![diagram](docs/mermaid-diagram5.png)
-
----
-
-# 🟡 Prioridade 2
-
-## TB-06 · Sugestões de estratégia
-
-![diagram](docs/mermaid-diagram4.png)
-
----
-
-## TB-08 · Sistema de rating
-
-![diagram](docs/mermaid-diagram6.png)
-
----
-
-# 🟢 Prioridade 3
-
-## TB-03 · Registro em log
-
-![diagram](docs/mermaid-diagram1.png)
-
----
-
-## TB-04 · Média de desempenho
-
-![diagram](docs/mermaid-diagram2.png)
-
----
-
-## TB-05 · Estatísticas com recursão
-
-![diagram](docs/mermaid-diagram3.png)
-
----
-
-## TB-09 · Leaderboard
-
-![diagram](docs/mermaid-diagram7.png)
-
----
-
-# ⭐ Funcionalidade Extra
-
-## TB-10 · Modo Fantasma
-
-![diagram](docs/mermaid-diagram8.png)
 
 ---
 
@@ -409,15 +333,11 @@ As histórias seguem o padrão:
 
 # 📸 Backlog Visual
 
-![Backlog](docs/backlog1.png.jpeg)
+![Backlog](docs/backlog1.png)
 
 ---
 
 # 🐞 Issue / Bug Tracker
-
-Gerenciamento realizado com GitHub Issues.
-
-## 📸 Issues do Projeto
 
 ![Issues](docs/issues.png)
 
@@ -425,36 +345,32 @@ Gerenciamento realizado com GitHub Issues.
 
 # 🌐 API HTTP
 
-## Endpoints principais
-
-### `GET /health`
+## `GET /health`
 
 Verifica se a API está online.
 
-### `POST /api/game/start`
+## `POST /api/game/start`
 
-Inicia uma sessão.
+Inicia sessão.
 
-### `POST /api/game/guess`
+## `POST /api/game/guess`
 
 Envia tentativa.
 
-### `POST /api/session/save`
+## `POST /api/session/save`
 
-Salva sessões em JSON.
+Salva sessões.
 
 ---
 
 # 🧪 Testes de Sistema
 
-| Funcionalidade         | Resultado |
-| ---------------------- | --------- |
-| Geração aleatória      | ✅ OK      |
-| Sistema de dificuldade | ✅ OK      |
-| Leaderboard            | ✅ OK      |
-| Registro em log        | ✅ OK      |
-| Relatório estatístico  | ✅ OK      |
-| Modo Fantasma          | ✅ OK      |
+| Funcionalidade    | Resultado |
+| ----------------- | --------- |
+| Geração aleatória | ✅         |
+| Leaderboard       | ✅         |
+| Logs              | ✅         |
+| Relatórios        | ✅         |
 
 ## 📸 Evidências
 
@@ -466,30 +382,22 @@ Salva sessões em JSON.
 
 # 🧪 Testes de Integração
 
-| Teste                   | Resultado |
-| ----------------------- | --------- |
-| Comunicação Front ↔ API | ✅ OK      |
-| Multiplayer             | ✅ OK      |
-| Persistência JSON       | ✅ OK      |
-| Endpoint `/health`      | ✅ OK      |
-| Fallback offline        | ✅ OK      |
+| Teste             | Resultado |
+| ----------------- | --------- |
+| Front ↔ API       | ✅         |
+| Multiplayer       | ✅         |
+| Persistência JSON | ✅         |
 
 ---
 
 # 👥 Programação em Par
 
-| Integrantes     | Funcionalidades        |
-| --------------- | ---------------------- |
-| Rafael + Cauã   | API HTTP e logs        |
-| João + Luis     | Estatísticas           |
-| Mateus + Rafael | Ranking e testes       |
-| João + Mateus   | Front-end e integração |
-
-Benefícios:
-
-* revisão contínua
-* redução de bugs
-* compartilhamento de conhecimento
+| Integrantes     | Funcionalidades |
+| --------------- | --------------- |
+| Rafael + Cauã   | API             |
+| João + Luis     | Estatísticas    |
+| Mateus + Rafael | Ranking         |
+| João + Mateus   | Integração      |
 
 ---
 
@@ -503,61 +411,46 @@ COLOCAR_LINK_DO_FIGMA_AQUI
 
 # 📝 Sketches e Storyboards
 
-## 🎮 Tela Inicial
-
-![TB-01](docs/telainicial1.png)
-
----
-
-## 🎮 Seleção de Dificuldade
-
-![TB-01](docs/tela2.png)
-
----
-
-## 🎮 Tela de Tentativa
-
-![TB-01](docs/tela3.png)
-
----
-
-## 🎮 Feedback
-
-![TB-01](docs/tela4.png)
-
----
-
-## 🎮 Relatório
-
-![TB-01](docs/tela5.png)
-
----
-
-## 🎮 Leaderboard
-
-![TB-01](docs/tela6.png)
-
----
-
-## 🎮 Modo Fantasma
-
-![TB-01](docs/tela7.png)
+![Tela](docs/tela1.png)
+![Tela](docs/tela2.png)
+![Tela](docs/tela3.png)
+![Tela](docs/tela4.png)
+![Tela](docs/tela5.png)
+![Tela](docs/tela6.png)
+![Tela](docs/tela7.png)
 
 ---
 
 # 🎥 Screencast da Entrega 03
 
-Demonstração:
+Demonstração completa do projeto funcionando:
 
-* integração web
+* integração Front-end ↔ Back-end
 * API HTTP
 * multiplayer
-* estatísticas
+* sistema de dificuldades
+* leaderboard
+* persistência em JSON
 * modo fantasma
+* testes do sistema
+* funcionamento completo do jogo
 
-## 📺 Link
+## 📺 Vídeo Demonstrativo
 
-https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
+[▶️ Assistir Screencast Completo](https://youtu.be/XPNKL4KcfU8?si=t-etO3ihPEAd2_y3)
+
+---
+
+# 🧪 Demonstração dos Testes
+
+O vídeo também apresenta:
+
+* execução dos testes
+* integração da API
+* validação do multiplayer
+* funcionamento do ranking
+* persistência das sessões
+* execução do front-end React + TSX
 
 ---
 
@@ -565,15 +458,15 @@ https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
 
 ## 💻 GitHub
 
-https://github.com/MateusDS-dev/Terminal_Breach
+[GitHub do Projeto](https://github.com/MateusDS-dev/Terminal_Breach)
 
 ## 🎨 Figma
 
 COLOCAR_LINK_DO_FIGMA_AQUI
 
-## 📺 Screencast
+## 📺 Screencast Completo
 
-https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
+[Assistir Projeto Funcionando](https://youtu.be/XPNKL4KcfU8?si=t-etO3ihPEAd2_y3)
 
 ---
 
@@ -581,7 +474,7 @@ https://youtube.com/shorts/lO7e-riMUbg?si=E5R2xM5VOt1JLnki
 
 ## `gcc` não encontrado
 
-Instalar MinGW/MSYS2 e adicionar ao PATH.
+Instalar MinGW/MSYS2.
 
 ## `make` não encontrado
 
@@ -589,28 +482,12 @@ Usar `mingw32-make`.
 
 ## Front-end não conecta
 
-* verificar API
-* validar `/health`
-* revisar `VITE_BACKEND_URL`
+Verificar `/health`.
 
 ## Porta ocupada
 
 ```bash
 --api 8090
-```
-
-## Multiplayer não conecta
-
-* liberar firewall
-* validar IP local
-* confirmar `/health`
-
-## `localhost:8080` não funciona
-
-Utilizar:
-
-```text
-127.0.0.1:8080
 ```
 
 ---
@@ -619,14 +496,81 @@ Utilizar:
 
 Projeto desenvolvido para a disciplina de Desenvolvimento de Software Prático — CESAR School.
 
-O projeto aplica:
+---
+
+# 📈 Roadmap Futuro
+
+* autenticação
+* ranking online
+* replay
+* matchmaking
+* deploy em nuvem
+
+---
+
+# 🔐 Segurança
+
+O sistema implementa:
+
+* validação de entradas
+* verificação de sessão
+* controle de erros HTTP
+* fallback offline
+
+---
+
+# 🧠 Conceitos Aplicados
 
 * programação imperativa
 * recursão
-* integração HTTP
-* multiplayer
 * persistência
-* análise estatística
+* integração HTTP
 * arquitetura cliente-servidor
+* Git/GitHub
+* modularização
 
-A funcionalidade extra implementa busca binária recursiva para visualização prática do algoritmo.
+---
+
+# 📊 Métricas do Projeto
+
+| Métrica             | Valor      |
+| ------------------- | ---------- |
+| Linguagem principal | C          |
+| Front-end           | React + TS |
+| API                 | HTTP       |
+| Persistência        | JSON       |
+
+---
+
+# 🗃️ Organização das Branches
+
+## Branches utilizadas
+
+* `main`
+* `frontend`
+* `backend`
+* `feature/multiplayer`
+* `feature/ranking`
+
+---
+
+# ✅ Critérios Acadêmicos Atendidos
+
+| Requisito         | Status |
+| ----------------- | ------ |
+| README completo   | ✅      |
+| GitHub organizado | ✅      |
+| Backlog           | ✅      |
+| Sprint            | ✅      |
+| Issues            | ✅      |
+| API HTTP          | ✅      |
+| Front-end         | ✅      |
+| Testes            | ✅      |
+| Storyboards       | ✅      |
+| Screencast        | ✅      |
+
+---
+
+# 📄 Licença
+
+Este projeto está licenciado sob a licença MIT.
