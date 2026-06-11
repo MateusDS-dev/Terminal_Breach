@@ -607,6 +607,8 @@ Utilizar:
 # 📚 Observações Acadêmicas
 
 Projeto desenvolvido para a disciplina de Desenvolvimento de Software Prático — CESAR School.
+https://app.notion.com/p/de8ce887c03a4990ba97bc83e963fa89?v=032286eee753472bae6999912ba14acf&source=copy_link
+
 
 O projeto aplica:
 
