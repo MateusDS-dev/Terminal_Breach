@@ -113,7 +113,7 @@ function Index() {
         {view === "multiplayer" && <MultiplayerSession player={player} onExit={() => setView("menu")} />}
 
         <footer className="mt-6 text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-          Terminal Breach · Web port · Baseado no projeto C de <span className="text-primary/80">MateusDS-dev</span>
+          Terminal Breach · Web port
         </footer>
       </div>
     </main>

@@ -80,6 +80,9 @@ void jogo_executar(sessao_t *s, const char *nome_jogador)
 
     printf("\n");
     printf("  [SISTEMA] Firewall ativo. Nivel: %s\n", s->dificuldade);
+    if (diff == DIFF_GHOST) {
+        printf("  [SISTEMA] Modo Ghost ativo.\n");
+    }
     if (max_tent > 0)
         printf("  [SISTEMA] Tentativas disponiveis: %d\n", max_tent);
     else
@@ -92,13 +95,12 @@ void jogo_executar(sessao_t *s, const char *nome_jogador)
     while (1) {
         if (max_tent > 0 && tentativa_atual >= max_tent) break;
 
-        if (max_tent > 0)
-            printf("  [TENTATIVA %d/%d] Digite o codigo: ", tentativa_atual + 1, max_tent);
-        else
-            printf("  [TENTATIVA %d] Digite o codigo: ", tentativa_atual + 1);
+        printf("  [TENTATIVA %d/%d] Digite o codigo: ", tentativa_atual + 1, max_tent > 0 ? max_tent : tentativa_atual + 1);
 
         int palpite = 0;
         if (scanf("%d", &palpite) != 1) {
+            char buf[32];
+            scanf("%s", buf);
             printf("[ERRO] Entrada invalida. Tente novamente.\n");
             while ((c = getchar()) != '\n' && c != EOF);
             continue;
@@ -108,8 +110,13 @@ void jogo_executar(sessao_t *s, const char *nome_jogador)
         tentativa_atual++;
 
         if (palpite == segredo) {
+            printf("  [ACC] CORRETO!\n\n");
             ganhou = 1;
             break;
+        }
+
+        if (diff == DIFF_GHOST) {
+            printf("  [FAIL] Errado! Sem dicas. Continue tentando.\n\n");
         } else if (palpite > segredo) {
             printf("  [WARN] Porta acima do alvo. Recuando no range...\n\n");
         } else {
@@ -119,7 +126,7 @@ void jogo_executar(sessao_t *s, const char *nome_jogador)
 
     s->tentativas = tentativa_atual;
     s->venceu     = ganhou;
-    strncpy(s->rating, calcular_rating(tentativa_atual, ganhou), sizeof(s->rating) - 1);
+    strncpy(s->rating, calcular_rating(s->tentativas, s->venceu), sizeof(s->rating) - 1);
 
     printf("\n");
     if (ganhou) {

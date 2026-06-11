@@ -136,10 +136,13 @@ export function GameSession({ player, onExit, daily = false }: Props) {
         const newAttempts = result.attempts;
         setAttempts(newAttempts);
 
-        if (result.hint === "lower") {
-          setHigh((h) => Math.min(h, n - 1));
-        } else if (result.hint === "higher") {
-          setLow((l) => Math.max(l, n + 1));
+        const showHint = difficulty !== "ghost";
+        if (showHint) {
+          if (result.hint === "lower") {
+            setHigh((h) => Math.min(h, n - 1));
+          } else if (result.hint === "higher") {
+            setLow((l) => Math.max(l, n + 1));
+          }
         }
 
         if (result.won) {
@@ -153,7 +156,9 @@ export function GameSession({ player, onExit, daily = false }: Props) {
           return;
         }
 
-        const hint: Feedback = result.hint === "lower"
+        const hint: Feedback = difficulty === "ghost"
+          ? { type: "fail", text: "Access Denied." }
+          : result.hint === "lower"
           ? { type: "warn", text: "Porta acima do alvo. Recuando no range..." }
           : { type: "scan", text: "Código abaixo. Scanning porta superior..." };
         setHistory((h) => [...h, { type: "info", text: `Tentativa ${newAttempts}: ${n}` }, hint]);
@@ -184,13 +189,17 @@ export function GameSession({ player, onExit, daily = false }: Props) {
     }
 
     // Update visible range based on feedback
-    if (n > secret) {
-      setHigh((h) => Math.min(h, n - 1));
-    } else {
-      setLow((l) => Math.max(l, n + 1));
+    if (difficulty !== "ghost") {
+      if (n > secret) {
+        setHigh((h) => Math.min(h, n - 1));
+      } else {
+        setLow((l) => Math.max(l, n + 1));
+      }
     }
 
-    const hint: Feedback = n > secret
+    const hint: Feedback = difficulty === "ghost"
+      ? { type: "fail", text: `Errado. Sem dicas.` }
+      : n > secret
       ? { type: "warn", text: `Porta acima do alvo. Recuando no range...` }
       : { type: "scan", text: `Código abaixo. Scanning porta superior...` };
 

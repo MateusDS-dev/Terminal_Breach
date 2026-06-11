@@ -19,7 +19,7 @@ export function Leaderboard({ onBack }: { onBack: () => void }) {
   });
 
   const top: (Sessao & { score: number })[] = filtered
-    .map((s) => ({ ...s, score: computeScore(s) }))
+    .map((s) => ({ ...s, jogador: s.jogador || (s as any).player || "Anonimo", score: computeScore(s) }))
     .sort((a, b) => b.score - a.score)
     .slice(0, 10);
 

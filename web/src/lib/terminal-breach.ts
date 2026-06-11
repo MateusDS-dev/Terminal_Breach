@@ -31,6 +31,7 @@ export function genSecret(): number {
 
 export interface Sessao {
   jogador: string;
+  player?: string;
   dificuldade: string;
   segredo: number;
   tentativas: number;
@@ -43,11 +44,25 @@ export interface Sessao {
 
 const STORAGE_KEY = "terminal_breach_audit_log_v1";
 
+function normalizeLoadedSession(raw: any): Sessao {
+  const jogador = typeof raw.jogador === "string" && raw.jogador.trim() !== ""
+    ? raw.jogador
+    : typeof raw.player === "string" && raw.player.trim() !== ""
+    ? raw.player
+    : "Anonimo";
+
+  return {
+    ...raw,
+    jogador,
+  };
+}
+
 export function loadSessions(): Sessao[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as Sessao[]) : [];
+    const list = raw ? (JSON.parse(raw) as any[]) : [];
+    return list.map(normalizeLoadedSession);
   } catch {
     return [];
   }
@@ -55,7 +70,7 @@ export function loadSessions(): Sessao[] {
 
 export function saveSession(s: Sessao) {
   const all = loadSessions();
-  all.push(s);
+  all.push({ ...s, player: s.player ?? s.jogador });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
 }
 
